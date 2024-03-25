@@ -16,16 +16,20 @@
   "author": "Thuydinh",
   "license": "ISC",
   "dependencies": {
+    "@sequelize/core": "^7.0.0-alpha.37",
     "body-parser": "^1.20.2",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
-    "express": "^4.19.1"
+    "express": "^4.19.1",
+    "mysql2": "^2.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.24.3",
     "@babel/node": "^7.23.9",
     "@babel/preset-env": "^7.24.3",
     "@babel/register": "^7.23.7",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "sequelize": "^6.37.1",
+    "sequelize-cli": "^6.2.0"
   }
 }
