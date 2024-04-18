@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get CRUD</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<style>
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .table {
+        max-width: 1024px;
+        margin: 20px;
+        border: 1px solid black;
+        /* text-align: center; */
+    }
+
+    .table th,
+    td {
+        border-right: 1px solid black;
+    }
+
+    .table th {
+        text-align: center;
+    }
+
+    .btn {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-edit {
+        background: white;
+        color: black;
+        border-radius: 5px;
+        height: 32px;
+        width: 54px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .btn-delete {
+        background: #f10831;
+        color: black;
+        border-radius: 5px;
+        height: 32px;
+        width: 64px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Email</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Gender</th>
+                    <th scope="col">Age</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <!-- = : in ra du lieu -->
+            <% for(let i=0; i < dataTable.length; i++) { %>
+                <tr>
+                    <td>
+                        <%= dataTable[i].email %>
+                    </td>
+                    <td>
+                        <%= dataTable[i].firstName %>
+                    </td>
+                    <td>
+                        <%= dataTable[i].lastName %>
+                    </td>
+                    <td>
+                        <%= dataTable[i].gender %>
+                    </td>
+                    <td>
+                        <%= dataTable[i].age %>
+                    </td>
+                    <td>
+                        <div class="btn">
+                            <a href="/edit-crud?id=<%= dataTable[i].id %>" class="btn-edit" type="button">Edit</a>
+                            <a href="/delete-crud?id=<%= dataTable[i].id %>" class="btn-delete" type="button">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                <% } %>
+        </table>
+    </div>
+</body>
+
+</html>
