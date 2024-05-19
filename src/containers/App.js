@@ -12,12 +12,16 @@ import { path } from '../utils'
 
 import Home from '../routes/Home';
 import Login from './Auth/login';
+import Signup from './Auth/signup';
+import Flashcard from './Auth/flashcard';
 // import Login from '../routes/Login';
 import Header from './Header/Header';
 import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 import ConfirmModal from '../components/ConfirmModal';
+
+import CustomScrollbars from '../components/CustomScrollbars'
 
 class App extends Component {
 
@@ -47,13 +51,17 @@ class App extends Component {
                         <ConfirmModal />
                         {this.props.isLoggedIn && <Header />}
 
-                        <span className="content-container">
-                            <Switch>
-                                <Route path={path.HOME} exact component={(Home)} />
-                                <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                                <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                            </Switch>
-                        </span>
+                        <div className="content-container">
+                            <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
+                                <Switch>
+                                    <Route path={path.HOME} exact component={(Home)} />
+                                    <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
+                                    <Route path={path.SIGNUP} component={userIsNotAuthenticated(Signup)} />
+                                    <Route path={path.FLASHCARD} component={userIsNotAuthenticated(Flashcard)} />
+                                    <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                                </Switch>
+                            </CustomScrollbars>
+                        </div>
 
                         <ToastContainer
                             className="toast-container" toastClassName="toast-item" bodyClassName="toast-item-body"

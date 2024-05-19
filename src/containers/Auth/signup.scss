@@ -4,13 +4,13 @@
     padding: 0;
 }
 
-.login-background {
+.signup-background {
     height: 100vh;
     display: flex;
     justify-content: center;
     background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
 
-    .login-container-left {
+    .signup-container-right {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -22,26 +22,26 @@
             font-weight: 600px;
         }
 
-        .signup-btn {
+        .login-btn {
             width: 100%;
-            background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
             border: none;
             outline: none;
             border-radius: 15px;
             padding: 5px 30px;
-            color: aliceblue;
+            background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
+            color: white;
             font-size: 16px;
         }
     }
 
-    .login-container-right {
+    .signup-container-left {
         display: flex;
         width: 100%;
         height: 100%;
         max-width: 1024px;
         background-color: white;
 
-        .login-content {
+        .signup-content {
             padding: 100px 150px;
 
             .text-title {
@@ -62,14 +62,18 @@
                 }
             }
 
-            .login-input {
+            .signup-input {
                 display: flex;
                 flex-direction: column;
                 gap: 5px;
                 margin-bottom: 20px;
+
+                .form-control {
+                    background-color: light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
+                }
             }
 
-            .text-login {
+            .text-signup {
                 width: 100%;
                 background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
                 border: none;
@@ -85,7 +89,7 @@
                 margin-top: 10px;
             }
 
-            .other-login {
+            .other-signup {
                 display: flex;
                 justify-content: center;
                 align-items: flex-end;
@@ -95,12 +99,12 @@
             }
 
             .line {
-                width: 33%;
+                width: 35%;
                 height: 1px;
                 background-color: #808080c7;
             }
 
-            .social-login {
+            .social-signup {
                 display: flex;
                 justify-content: center;
                 gap: 20px;

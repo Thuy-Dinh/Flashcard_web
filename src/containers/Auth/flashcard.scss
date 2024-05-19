@@ -1,0 +1,128 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    background-color: #dcf5f0;
+    height: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    /* Ẩn thanh cuộn IE và Edge */
+    scrollbar-width: none;
+    /* Ẩn thanh cuộn Firefox */
+
+    .body::-webkit-scrollbar {
+        display: none;
+        /* Ẩn thanh cuộn trên Webkit (Chrome, Safari) */
+    }
+
+    .body-content {
+        width: 100%;
+        max-width: 1024px;
+
+
+
+        .body-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 15px 0;
+        }
+
+        .des-input {
+            margin-bottom: 10px;
+        }
+
+        .flashcard {
+            background-color: white;
+            padding: 20px;
+            margin: 30px 0 0;
+            border-radius: 8px;
+
+            .des {
+                border-bottom: 3px solid #dcf5f0;
+                padding-bottom: 8px;
+                display: flex;
+                justify-content: space-between;
+
+                .STT {
+                    font-size: 16px;
+                }
+
+                .icon-trash {
+                    font-weight: 300;
+                    font-size: 18px;
+                    cursor: pointer;
+                }
+
+                .icon-trash.disabled {
+                    color: gray;
+                    cursor: not-allowed;
+                }
+            }
+
+            .flashcard-content {
+                display: flex;
+                justify-content: space-between;
+                width: 100;
+                gap: 10px;
+                margin-top: 15px;
+
+                .flashcard-input {
+                    width: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    font-size: 16px;
+                    color: #13131378;
+                }
+
+                .img {
+                    border: 1px dashed black;
+                    padding: 20px;
+                    text-align: center;
+                    line-height: 20px;
+                }
+            }
+        }
+
+        .add-flashcard {
+            margin-top: 20px;
+            border: 1px solid #dcf5f0;
+            border-radius: 5px;
+            background-color: white;
+            padding: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .add-flashcard:hover {
+            background-color: #87e39f87;
+        }
+
+        .btn-create {
+            float: right;
+            border: 1px solid #dcf5f0;
+            background-color: white;
+            padding: 15px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .btn-create:hover {
+            background-color: rgb(151, 239, 239);
+        }
+    }
+}

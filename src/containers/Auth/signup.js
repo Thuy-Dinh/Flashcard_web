@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
-import * as actions from "../../store/actions"; //redux
-import './login.scss';
+// import * as actions from "../../store/actions"; //redux
+import './signup.scss';
 import { FormattedMessage } from 'react-intl';
 
-class Login extends Component {
+class Signup extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: '',
             email: '',
             password: '',
             isShowPassword: false
         }
+    }
+
+    handleOnChangeUserName = (event) => {
+        this.setState({
+            username: event.target.value
+        })
     }
 
     handleOnChangeEmail = (event) => {
@@ -25,8 +32,8 @@ class Login extends Component {
             password: event.target.value
         })
     }
-    handleLogin = () => {
-        console.log('email: ', this.state.email, 'password: ', this.state.password)
+    handleSignup = () => {
+        console.log('username', this.state.username, 'email: ', this.state.email, 'password: ', this.state.password)
         console.log('all state: ', this.state)
     }
     handleShowHidePassword = () => {
@@ -34,23 +41,26 @@ class Login extends Component {
             isShowPassword: !this.state.isShowPassword
         })
     }
-    handleSignupRedirect = () => {
-        this.props.navigate('/signup');
+    handleLoginRedirect = () => {
+        this.props.navigate('/login');
     }
     render() {
         return (
-            <div className='login-background'>
-                <div className='login-container-left'>
-                    <div className='login-content row'>
-                        <div className='text-center text-welcome'>Welcome Back!</div>
-                        <p className='text-center'>Do you have an account ? Let's get you set up.</p>
-                        <button className='signup-btn' onClick={this.handleSignupRedirect}>Đăng kí</button>
-                    </div>
-                </div>
-                <div className='login-container-right'>
-                    <div className='login-content row'>
-                        <div className='col-12 text-title'>Đăng nhập</div>
-                        <div className='col-12 form-group login-input'>
+            <div className='signup-background'>
+                <div className='signup-container-left'>
+                    <div className='signup-content row'>
+                        <div className='col-12 text-title'>Tạo một tài khoản mới</div>
+                        <div className='col-12 form-group signup-input'>
+                            <label>Tên người dùng</label>
+                            <input
+                                type='text'
+                                className='form-control'
+                                placeholder='Nhập tên người dùng'
+                                value={this.state.username}
+                                onChange={(event) => this.handleOnChangeUserName(event)}
+                            />
+                        </div>
+                        <div className='col-12 form-group signup-input'>
                             <label>Email</label>
                             <input
                                 type='email'
@@ -60,7 +70,7 @@ class Login extends Component {
                                 onChange={(event) => this.handleOnChangeEmail(event)}
                             />
                         </div>
-                        <div className='col-12 form-group login-input'>
+                        <div className='col-12 form-group signup-input'>
                             <label>Mật khẩu</label>
                             <div className='custom-password'>
                                 <input
@@ -76,20 +86,24 @@ class Login extends Component {
                             </div>
                         </div>
                         <div className='col-12 text-center'>
-                            <button className='text-login' onClick={() => { this.handleLogin() }}>Đăng nhập</button>
+                            <button className='text-signup' onClick={() => { this.handleSignup() }}>Đăng kí</button>
                         </div>
-                        <div className='col-12 forgot-password'>
-                            <span>Quên mật khẩu?</span>
-                        </div>
-                        <div className='text-center other-login'>
+                        <div className='text-center other-signup'>
                             <div className='line'></div>
-                            <div>Hoặc đăng nhập bằng</div>
+                            <div>Hoặc đăng kí bằng</div>
                             <div className='line'></div>
                         </div>
-                        <div className='col-12 social-login'>
+                        <div className='col-12 social-signup'>
                             <i className='fab fa-google'></i>
                             <i className='fab fa-facebook'></i>
                         </div>
+                    </div>
+                </div>
+                <div className='signup-container-right'>
+                    <div className='signup-content row'>
+                        <div className='text-center text-welcome'>Welcome Back!</div>
+                        <p className='text-center'>To keep sharing your work with us, please log in.</p>
+                        <button className='login-btn' onClick={this.handleLoginRedirect}>Đăng nhập</button>
                     </div>
                 </div>
             </div>
@@ -103,12 +117,17 @@ const mapStateToProps = state => {
     };
 };
 
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         navigate: (path) => dispatch(push(path)),
+//         adminSignupSuccess: (adminInfo) => dispatch(actions.adminSignupSuccess(adminInfo)),
+//         adminSignupFail: () => dispatch(actions.adminSignupFail()),
+//     };
+// };
 const mapDispatchToProps = dispatch => {
     return {
-        navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        navigate: (path) => dispatch(push(path))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

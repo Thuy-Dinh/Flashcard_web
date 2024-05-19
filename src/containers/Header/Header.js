@@ -7,21 +7,63 @@ import { adminMenu } from './menuApp';
 import './Header.scss';
 
 class Header extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFocused: false,
+            searchInput: ''
+        };
+    }
+
+    handleFocus = () => {
+        this.setState({ isFocused: true });
+    };
+
+    handleBlur = () => {
+        this.setState({ isFocused: false });
+    };
+
+    handleInputChange = (event) => {
+        this.setState({ searchInput: event.target.value });
+    };
+
+    handleClearInput = () => {
+        this.setState({ searchInput: '' });
+    };
 
     render() {
-        const { processLogout } = this.props;
+        // const { processLogout } = this.props;
+        const { isFocused, searchInput } = this.state;
 
         return (
             <div className="header-container">
-                {/* thanh navigator */}
-                <div className="header-tabs-container">
-                    <Navigator menus={adminMenu} />
+                <div className='header-logo'>
+                    <div className='img-logo'></div>
+                    <div className='text-logo'>Flashcards</div>
+                </div>
+                <div className='header-center'>
+                    <div className='header-search'>
+                        <input
+                            placeholder='Tìm kiếm bất cứ điều gì'
+                            className='search-input'
+                            value={searchInput}
+                            onFocus={this.handleFocus}
+                            onBlur={this.handleBlur}
+                            onChange={this.handleInputChange}
+                        >
+                        </input>
+                        {isFocused && searchInput && (
+                            <i className='fas fa-times clear-icon' onMouseDown={this.handleClearInput}></i>
+                        )}
+                        <i className='fas fa-search search-icon'></i>
+                    </div>
+                </div>
+                <div className='header-user'>
+                    <div className='user-img'>T</div>
+                    <div className='user-name'>Thùy Đinh</div>
                 </div>
 
-                {/* nút logout */}
-                <div className="btn btn-logout" onClick={processLogout}>
-                    <i className="fas fa-sign-out-alt"></i>
-                </div>
+
             </div>
         );
     }
@@ -41,3 +83,11 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
+{/* nút logout */ }
+{/* <div className="btn btn-logout" onClick={processLogout}>
+                    <i className="fas fa-sign-out-alt"></i>
+                    {/* thanh navigator */}
+{/* <div className="header-tabs-container">
+                        <Navigator menus={adminMenu} />
+                    </div> */}
+// {/* </div> */} */}

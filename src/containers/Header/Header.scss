@@ -1,23 +1,128 @@
 @import "../../styles/common.scss";
 
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
 .header-container {
     z-index: 99;
     display: flex;
     justify-content: space-between;
-    background-color: $colormain;
-    color: $common-text-color;
-    height: 40px;
+    background-color: white;
+    // background-color: $colormain;
+    color: black;
+    // color: $common-text-color;
+    height: 60px;
     position: relative;
-    .btn-logout {
-        color: $common-text-color;
-        line-height: 40px;
-        height: 40px;
-        padding: 0 10px;
-        &:hover {
-            background-color: darken($colormain, 5);
+
+    .header-logo {
+        width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 3px;
+
+        .img-logo {
+            background: url('../../assets/images/logo.png') no-repeat;
+            background-size: contain;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
         }
-        i {
-            font-size: $base-size + 1px;
+
+        .text-logo {
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+
+    }
+
+    .header-center {
+        width: 50%;
+        padding: 0 20px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 16px;
+
+        .header-search {
+            position: relative;
+            border: 1px solid #6dd3c1d1;
+            border-radius: 15px;
+            width: 100%;
+            height: 70%;
+
+            .search-input {
+                outline: none;
+                width: 93%;
+                height: 100%;
+                border: 1px solid white;
+                border-right: 1px dashed rgb(143, 140, 140) !important;
+                display: flex;
+                align-items: flex-start;
+                border-top-left-radius: 15px;
+                border-bottom-left-radius: 15px;
+                padding: 10px 22px 10px 12px;
+            }
+
+            .clear-icon {
+                position: absolute;
+                top: 12px;
+                right: 9vh;
+                font-size: 17px;
+                cursor: pointer;
+            }
+
+            .search-icon {
+                position: absolute;
+                top: 11px;
+                right: 2vh;
+                font-size: 18px;
+                cursor: pointer;
+            }
         }
     }
+
+
+    .header-user {
+        width: 25%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+
+        .user-img {
+            cursor: pointer;
+            border-radius: 50%;
+            background-color: aquamarine;
+            color: white;
+            padding: 6px 14px;
+            font-size: 20px;
+        }
+
+        .user-name {
+            cursor: pointer;
+            font-size: 18px;
+        }
+    }
+
+    // .btn-logout {
+    //     color: $common-text-color;
+    //     line-height: 40px;
+    //     height: 40px;
+    //     padding: 0 10px;
+
+    //     &:hover {
+    //         background-color: darken($colormain, 5);
+    //     }
+
+    //     i {
+    //         font-size: $base-size + 1px;
+    //     }
+    // }
 }
