@@ -32,7 +32,7 @@ class Header extends Component {
     };
 
     render() {
-        // const { processLogout } = this.props;
+        const { processLogout } = this.props;
         const { isFocused, searchInput } = this.state;
 
         return (
@@ -58,7 +58,7 @@ class Header extends Component {
                         <i className='fas fa-search search-icon'></i>
                     </div>
                 </div>
-                <div className='header-user'>
+                <div className='header-user' onClick={processLogout}>
                     <div className='user-img'>T</div>
                     <div className='user-name'>Thùy Đinh</div>
                 </div>
@@ -72,7 +72,7 @@ class Header extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn
     };
 };
 
@@ -83,11 +83,3 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
-{/* nút logout */ }
-{/* <div className="btn btn-logout" onClick={processLogout}>
-                    <i className="fas fa-sign-out-alt"></i>
-                    {/* thanh navigator */}
-{/* <div className="header-tabs-container">
-                        <Navigator menus={adminMenu} />
-                    </div> */}
-// {/* </div> */} */}

@@ -13,6 +13,7 @@ import { path } from '../utils'
 import Home from '../routes/Home';
 import Login from './Auth/login';
 import Signup from './Auth/signup';
+import HomePage from './System/UserManage';
 import Flashcard from './Auth/flashcard';
 // import Login from '../routes/Login';
 import Header from './Header/Header';
@@ -57,7 +58,8 @@ class App extends Component {
                                     <Route path={path.HOME} exact component={(Home)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.SIGNUP} component={userIsNotAuthenticated(Signup)} />
-                                    <Route path={path.FLASHCARD} component={userIsNotAuthenticated(Flashcard)} />
+                                    <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
+                                    <Route path={path.FLASHCARD} component={userIsAuthenticated(Flashcard)} />
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                                 </Switch>
                             </CustomScrollbars>
@@ -79,7 +81,7 @@ class App extends Component {
 const mapStateToProps = state => {
     return {
         started: state.app.started,
-        isLoggedIn: state.admin.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn
     };
 };
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from "connected-react-router";
-import * as actions from "../../store/actions"; //redux
+import { push } from 'connected-react-router';
+import * as actions from '../../store/actions'; // redux
 import './login.scss';
 import { FormattedMessage } from 'react-intl';
+import { handleLoginApi } from '../../services/userService';
 
 class Login extends Component {
     constructor(props) {
@@ -11,32 +12,60 @@ class Login extends Component {
         this.state = {
             email: '',
             password: '',
-            isShowPassword: false
-        }
+            isShowPassword: false,
+            errMessage: ''
+        };
     }
 
     handleOnChangeEmail = (event) => {
         this.setState({
             email: event.target.value
-        })
+        });
     }
+
     handleOnChangePassword = (event) => {
         this.setState({
             password: event.target.value
-        })
+        });
     }
-    handleLogin = () => {
-        console.log('email: ', this.state.email, 'password: ', this.state.password)
-        console.log('all state: ', this.state)
+
+    handleLogin = async () => {
+        this.setState({
+            errMessage: ''
+        });
+
+        try {
+            let data = await handleLoginApi(this.state.email, this.state.password);
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message
+                });
+            }
+            if (data && data.errCode === 0) {
+                this.props.userLoginSuccess(data.user);
+                console.log('login succeeds');
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    });
+                }
+            }
+        }
     }
+
     handleShowHidePassword = () => {
         this.setState({
             isShowPassword: !this.state.isShowPassword
-        })
+        });
     }
+
     handleSignupRedirect = () => {
         this.props.navigate('/signup');
     }
+
     render() {
         return (
             <div className='login-background'>
@@ -75,6 +104,9 @@ class Login extends Component {
                                 </span>
                             </div>
                         </div>
+                        <div className='col-12' style={{ color: 'red', paddingBottom: 15 }}>
+                            {this.state.errMessage}
+                        </div>
                         <div className='col-12 text-center'>
                             <button className='text-login' onClick={() => { this.handleLogin() }}>Đăng nhập</button>
                         </div>
@@ -93,7 +125,7 @@ class Login extends Component {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 }
 
@@ -106,8 +138,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
+        // userLoginFail: () => dispatch(actions.adminLoginFail()),
     };
 };
 
