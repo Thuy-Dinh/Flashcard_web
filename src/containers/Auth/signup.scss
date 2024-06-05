@@ -11,6 +11,7 @@
     background: linear-gradient(135deg, rgba(34, 193, 195, 1) 0%, rgba(253, 187, 45, 1) 100%);
 
     .signup-container-right {
+        width: 35%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -36,7 +37,7 @@
 
     .signup-container-left {
         display: flex;
-        width: 100%;
+        width: 65%;
         height: 100%;
         max-width: 1024px;
         background-color: white;

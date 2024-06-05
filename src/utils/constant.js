@@ -4,7 +4,8 @@ export const path = {
     SIGNUP: '/signup',
     HOMEPAGE: '/home',
     LOG_OUT: '/logout',
-    SYSTEM: '/system'
+    // SYSTEM: '/system'
+    USERMANAGE: '/usermanage'
 };
 
 export const languages = {

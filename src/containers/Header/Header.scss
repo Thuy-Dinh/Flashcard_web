@@ -88,26 +88,51 @@
         }
     }
 
-
-    .header-user {
+    .header-right {
         width: 25%;
+        position: relative;
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 5px;
-
-        .user-img {
-            cursor: pointer;
-            border-radius: 50%;
-            background-color: aquamarine;
-            color: white;
-            padding: 6px 14px;
-            font-size: 20px;
+        .header-user {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+    
+            .user-img {
+                cursor: pointer;
+                border-radius: 50%;
+                background-color: aquamarine;
+                color: white;
+                padding: 6px 14px;
+                font-size: 20px;
+            }
+    
+            .user-name {
+                cursor: pointer;
+                font-size: 18px;
+            }
         }
-
-        .user-name {
-            cursor: pointer;
-            font-size: 18px;
+        .header-navigator{
+            position: absolute;
+            top: 60px;
+            background-color: white;
+            box-shadow: 3px 3px 5px 0 gray;
+            border-radius: 5px;
+            .header-item {
+                padding: 5px 30px 5px 15px;
+                border-bottom: 1px solid gray;
+                cursor: pointer;
+                &:last-child {
+                    border: none;
+                }
+                &:hover {
+                    background-color: rgb(220, 223, 223);
+                }
+            }
+        
         }
-    }
+    }    
 }

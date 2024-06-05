@@ -19,7 +19,7 @@ class Login extends Component {
     }
 
     initialState = {
-        username: '',
+        email: '',
         password: '',
         loginError: ''
     }
@@ -34,8 +34,8 @@ class Login extends Component {
         })
     }
 
-    onUsernameChange = (e) => {
-        this.setState({ username: e.target.value })
+    onEmailChange = (e) => {
+        this.setState({ email: e.target.value })
     }
 
     onPasswordChange = (e) => {
@@ -44,16 +44,16 @@ class Login extends Component {
 
     redirectToSystemPage = () => {
         const { navigate } = this.props;
-        const redirectPath = '/system/user-manage';
+        const redirectPath = '/home';
         navigate(`${redirectPath}`);
     }
 
     processLogin = () => {
-        const { username, password } = this.state;
+        const { email, password } = this.state;
 
         const { adminLoginSuccess, adminLoginFail } = this.props;
         let loginBody = {
-            username: 'admin',
+            email: 'user',
             password: '123456'
         }
         //sucess
@@ -97,7 +97,7 @@ class Login extends Component {
     }
 
     render() {
-        const { username, password, loginError } = this.state;
+        const { email, password, loginError } = this.state;
         const { lang } = this.props;
 
         return (
@@ -110,13 +110,13 @@ class Login extends Component {
                         <div className="form-group icon-true">
                             <img className="icon" src={userIcon} alt="this" />
                             <input
-                                placeholder={LanguageUtils.getMessageByKey("login.username", lang)}
-                                id="username"
-                                name="username"
+                                placeholder={LanguageUtils.getMessageByKey("login.email", lang)}
+                                id="email"
+                                name="email"
                                 type="text"
                                 className="form-control"
-                                value={username}
-                                onChange={this.onUsernameChange}
+                                value={email}
+                                onChange={this.onEmailChange}
                             />
                         </div>
 
@@ -165,8 +165,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path)),
-        adminLoginSuccess: (adminInfo) => dispatch(actions.adminLoginSuccess(adminInfo)),
-        adminLoginFail: () => dispatch(actions.adminLoginFail()),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo)),
+        userLoginFail: () => dispatch(actions.userLoginFail()),
     };
 };
 

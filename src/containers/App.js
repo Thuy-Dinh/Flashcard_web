@@ -13,11 +13,12 @@ import { path } from '../utils'
 import Home from '../routes/Home';
 import Login from './Auth/login';
 import Signup from './Auth/signup';
-import HomePage from './System/UserManage';
+import HomePage from './Auth/homepage';
+import UserManage from './System/UserManage';
 import Flashcard from './Auth/flashcard';
 // import Login from '../routes/Login';
-import Header from './Header/Header';
-import System from '../routes/System';
+// import Header from './Header/Header';
+// import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 import ConfirmModal from '../components/ConfirmModal';
@@ -50,7 +51,7 @@ class App extends Component {
                 <Router history={history}>
                     <div className="main-container">
                         <ConfirmModal />
-                        {this.props.isLoggedIn && <Header />}
+                        {this.props.isLoggedIn}
 
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh', width: '100%' }}>
@@ -59,8 +60,9 @@ class App extends Component {
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.SIGNUP} component={userIsNotAuthenticated(Signup)} />
                                     <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
+                                    <Route path={path.USERMANAGE} component={userIsAuthenticated(UserManage)} />
                                     <Route path={path.FLASHCARD} component={userIsAuthenticated(Flashcard)} />
-                                    <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
+                                    {/* <Route path={path.SYSTEM} component={userIsAuthenticated(System)} /> */}
                                 </Switch>
                             </CustomScrollbars>
                         </div>

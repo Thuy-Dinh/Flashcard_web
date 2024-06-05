@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from 'connected-react-router';
 import * as actions from '../../store/actions'; // redux
 import './login.scss';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 import { handleLoginApi } from '../../services/userService';
 
 class Login extends Component {
@@ -71,8 +71,8 @@ class Login extends Component {
             <div className='login-background'>
                 <div className='login-container-left'>
                     <div className='login-content row'>
-                        <div className='text-center text-welcome'>Welcome Back!</div>
-                        <p className='text-center'>Do you have an account ? Let's get you set up.</p>
+                        <div className='text-center text-welcome'>Chào mừng trở lại!</div>
+                        <p className='text-center'>Bạn chưa có tài khoản? Hãy đăng kí.</p>
                         <button className='signup-btn' onClick={this.handleSignupRedirect}>Đăng kí</button>
                     </div>
                 </div>

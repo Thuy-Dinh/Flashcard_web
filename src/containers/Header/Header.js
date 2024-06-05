@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import * as actions from "../../store/actions";
-import Navigator from '../../components/Navigator';
-import { adminMenu } from './menuApp';
+import { Redirect } from 'react-router-dom';
+// import Navigator from '../../components/Navigator';
+// import { adminMenu } from './menuApp';
 import './Header.scss';
 
 class Header extends Component {
@@ -11,10 +12,36 @@ class Header extends Component {
         super(props);
         this.state = {
             isFocused: false,
-            searchInput: ''
+            searchInput: '',
+            redirectToUserManage: false
         };
+        this.wrapperRef = React.createRef();
     }
 
+
+    handleNavigateToUserManage = () => {
+        this.setState({ redirectToUserManage: true }); // Thay đổi trạng thái khi bấm vào <div>
+    }
+    
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside);
+    }
+
+    handleClickOutside = (event) => {
+        if (this.wrapperRef.current && !this.wrapperRef.current.contains(event.target)) {
+            this.setState({ isNavigatorVisible: false });
+        }
+    };
+
+    toggleNavigator = () => {
+        this.setState(prevState => ({
+            isNavigatorVisible: !prevState.isNavigatorVisible
+        }));
+    };
     handleFocus = () => {
         this.setState({ isFocused: true });
     };
@@ -33,7 +60,11 @@ class Header extends Component {
 
     render() {
         const { processLogout } = this.props;
-        const { isFocused, searchInput } = this.state;
+        const { isNavigatorVisible, isFocused, searchInput, redirectToUserManage } = this.state;
+
+        if (this.state.redirectToUserManage) {
+            return <Redirect to='/usermanage' />; // Sử dụng Redirect để điều hướng
+        }
 
         return (
             <div className="header-container">
@@ -58,12 +89,20 @@ class Header extends Component {
                         <i className='fas fa-search search-icon'></i>
                     </div>
                 </div>
-                <div className='header-user' onClick={processLogout}>
-                    <div className='user-img'>T</div>
-                    <div className='user-name'>Thùy Đinh</div>
+                <div className='header-right'>
+                    <div className='header-user' onClick={this.toggleNavigator}>
+                        <div className='user-img'>T</div>
+                        <div className='user-name'>Thùy Đinh</div>
+                    </div>
+                    {isNavigatorVisible && (
+                        <div ref={this.wrapperRef} className="header-navigator" tabIndex="-1">
+                            <div className='header-item' onClick={this.handleNavigateToUserManage}>Quản lí tài khoản</div>
+                            <div className='header-item'>Thư viện</div>
+                            <div className='header-item'>Bộ sưu tập</div>
+                            <div className='header-item' onClick={processLogout}>Đăng xuất</div>
+                        </div>
+                    )}
                 </div>
-
-
             </div>
         );
     }

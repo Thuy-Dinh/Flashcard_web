@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 // import * as actions from "../../store/actions"; //redux
 import './signup.scss';
-import { FormattedMessage } from 'react-intl';
+// import { FormattedMessage } from 'react-intl';
 
 class Signup extends Component {
     constructor(props) {
@@ -101,8 +101,8 @@ class Signup extends Component {
                 </div>
                 <div className='signup-container-right'>
                     <div className='signup-content row'>
-                        <div className='text-center text-welcome'>Welcome Back!</div>
-                        <p className='text-center'>To keep sharing your work with us, please log in.</p>
+                        <div className='text-center text-welcome'>Chào mừng trở lại!</div>
+                        <p className='text-center'>Bạn đã có tài khoản? Để tiếp tục công việc, hãy đăng nhập.</p>
                         <button className='login-btn' onClick={this.handleLoginRedirect}>Đăng nhập</button>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from "connected-react-router";
-import * as actions from "../../store/actions"; //redux
-import './flashcard.scss';
+// import { push } from "connected-react-router";
+// import * as actions from "../../store/actions"; //redux
 import Header from '../Header/Header';
-import { FormattedMessage } from 'react-intl';
+import './flashcard.scss';
+// import { FormattedMessage } from 'react-intl';
 
 class Flashcard extends Component {
     constructor(props) {
@@ -12,11 +12,8 @@ class Flashcard extends Component {
         this.state = {
             topic: '',
             title: '',
-            terminology: '',
-            identify: '',
             flashcards: [
-                { id: 1, terminology: '', identify: '' },
-                // { id: 2, terminology: '', identify: '' }
+                { id: 1, terminology: '', identify: '' }
             ]
         }
     }
@@ -34,8 +31,9 @@ class Flashcard extends Component {
     }
 
     handleAddFlashcard = () => {
+        const newId = this.state.flashcards.length > 0 ? this.state.flashcards[this.state.flashcards.length - 1].id + 1 : 1;
         this.setState(prevState => ({
-            flashcards: [...prevState.flashcards, { terminology: '', identify: '' }]
+            flashcards: [...prevState.flashcards, { id: newId, terminology: '', identify: '' }]
         }));
     }
 
@@ -59,16 +57,15 @@ class Flashcard extends Component {
     }
 
     handleCreate = () => {
-        console.log('topic: ', this.state.topic, 'title: ', this.state.title)
-        console.log('all state: ', this.state)
+        console.log('topic: ', this.state.topic, 'title: ', this.state.title, 'flashcards: ', this.state.flashcards);
+        // console.log('Flashcard IDs: ', this.state.flashcards.map(flashcard => flashcard.id));
+        console.log('all state: ', this.state);
     }
 
     render() {
         return (
             <>
-                <div className='header'>
-                    <Header />
-                </div>
+                <Header />
                 <div className='body'>
                     <div className='body-content'>
                         <div className='body-title'>Tạo bộ flashcard mới</div>
@@ -94,7 +91,7 @@ class Flashcard extends Component {
                                 />
                             </div>
                             {this.state.flashcards.map((flashcard, index) => (
-                                <div className='flashcard' key={index}>
+                                <div className='flashcard' key={flashcard.id}>
                                     <div className='col-12 des'>
                                         <div className='STT'>{index + 1}</div>
                                         <i
