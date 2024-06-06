@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
     up: async (queryInterface, Sequelize) => {
-        await queryInterface.createTable('Similarflashcards', {
+        await queryInterface.createTable('Setflashcards', {
             id: {
                 allowNull: false,
                 autoIncrement: true,
@@ -12,16 +12,13 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             flashcardId: {
-                type: Sequelize.INTEGER
+                type: Sequelize.STRING
             },
             title: {
                 type: Sequelize.STRING
             },
             topic: {
                 type: Sequelize.STRING
-            },
-            quantity: {
-                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,
@@ -34,6 +31,6 @@ module.exports = {
         });
     },
     down: async (queryInterface, Sequelize) => {
-        await queryInterface.dropTable('Similarflashcards');
+        await queryInterface.dropTable('Setflashcards');
     }
 };

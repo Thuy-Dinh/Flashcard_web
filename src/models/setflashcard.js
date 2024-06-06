@@ -3,7 +3,7 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Similarflashcard extends Model {
+    class Setflashcard extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -13,15 +13,14 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
         }
     };
-    Similarflashcard.init({
+    Setflashcard.init({
         userId: DataTypes.INTEGER,
-        flashcardId: DataTypes.INTEGER,
+        flashcardId: DataTypes.STRING,
         title: DataTypes.STRING,
-        topic: DataTypes.STRING,
-        quantity: DataTypes.INTEGER
+        topic: DataTypes.STRING
     }, {
         sequelize,
-        modelName: 'Similarflashcard',
+        modelName: 'Setflashcard',
     });
-    return Similarflashcard;
+    return Setflashcard;
 };
