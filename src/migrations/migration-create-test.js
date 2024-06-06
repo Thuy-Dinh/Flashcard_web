@@ -8,11 +8,15 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            userId: {
-                type: Sequelize.INTEGER
-            },
-            flashcardId: {
-                type: Sequelize.INTEGER
+            setFlashcardId: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: {
+                      tableName: 'setflashcards'
+                    },
+                    key: 'id',
+                },
+                allowNull: false,
             },
             time: {
                 type: Sequelize.INTEGER

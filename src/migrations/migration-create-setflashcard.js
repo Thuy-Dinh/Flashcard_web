@@ -9,10 +9,14 @@ module.exports = {
                 type: Sequelize.INTEGER
             },
             userId: {
-                type: Sequelize.INTEGER
-            },
-            flashcardId: {
-                type: Sequelize.STRING
+                type: Sequelize.DataTypes.INTEGER,
+                references: {
+                  model: {
+                    tableName: 'users'
+                  },
+                  key: 'id',
+                },
+                allowNull: false,
             },
             title: {
                 type: Sequelize.STRING

@@ -1,52 +1,29 @@
-// import flashcardService from "../services/flashcardService";
+import flashcardService from "../services/flashcardServive";
 
-// let handleCreateFlashcard = async (req, res) => {
-//     let { idUser, title, topic, flashcards } = req.body;
+let handleCreateFlashcard = async (req, res) => {
+    let setFlashcardId = req.body.setFlashcardId;
+    let terminology = req.body.terminology;
+    let identify = req.body.identify;
 
-//     if (!idUser || !title || !topic || !flashcards || !Array.isArray(flashcards)) {
-//         return res.status(500).json({
-//             errCode: 1,
-//             message: 'Missing input parameters!'
-//         });
-//     }
+    if (!setFlashcardId || !terminology || !identify) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Các trường dữ liệu không được để trống!'
+        });
+    }
 
-//     try {
-//         // Create flashcards and collect their ids
-//         let flashcardIds = [];
-//         for (let flashcard of flashcards) {
-//             let { terminology, identify } = flashcard;
-//             if (!terminology || !identify) {
-//                 return res.status(500).json({
-//                     errCode: 1,
-//                     message: 'Missing flashcard parameters!'
-//                 });
-//             }
-//             let createdFlashcard = await flashcardService.createFlashcard({ terminology, identify });
-//             flashcardIds.push(createdFlashcard.id);
-//         }
+    let newFlashcard = await flashcardService.handleCreateNewFlashcard(setFlashcardId, terminology, identify);
+    console.log(newFlashcard);
 
-//         // Create flashcard set
-//         let flashcardSet = {
-//             idUser,
-//             title,
-//             topic,
-//             idFlashcard: flashcardIds
-//         };
-//         await flashcardService.createFlashcardSet(flashcardSet);
+    // return flashcard info
+    return res.status(200).json({
+        errCode: newFlashcard.errCode,
+        message: newFlashcard.errMessage,
+        flashcard: newFlashcard.flashcard ? newFlashcard.flashcard : {}
+    });
+};
 
-//         return res.status(200).json({
-//             errCode: 0,
-//             message: 'Flashcard set created successfully!'
-//         });
-//     } catch (error) {
-//         console.error('Error creating flashcard set:', error);
-//         return res.status(500).json({
-//             errCode: 2,
-//             message: 'Error creating flashcard set!'
-//         });
-//     }
-// };
-
-// module.exports = {
-//     handleCreateFlashcard: handleCreateFlashcard
-// };
+module.exports = {
+    handleCreateFlashcard: handleCreateFlashcard,
+    // handleGetAllUsers: handleGetAllUsers
+};

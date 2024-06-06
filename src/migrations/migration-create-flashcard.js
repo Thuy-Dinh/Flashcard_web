@@ -8,6 +8,16 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
+            setFlashcardId: {
+                type: Sequelize.DataTypes.INTEGER,
+                references: {
+                  model: {
+                    tableName: 'setflashcards'
+                  },
+                  key: 'id',
+                },
+                allowNull: false,
+            },
             identify: {
                 type: Sequelize.STRING
             },

@@ -14,8 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         }
     };
     Test.init({
-        userId: DataTypes.INTEGER,
-        flashcardId: DataTypes.INTEGER,
+        setFlashcardId: DataTypes.INTEGER,
         time: DataTypes.INTEGER,
         form: DataTypes.STRING,
         quantity: DataTypes.INTEGER

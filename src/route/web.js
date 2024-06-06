@@ -1,6 +1,8 @@
 import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
+import setFlashcardController from "../controllers/setFlashcardController";
+import flashcardController from "../controllers/flashcardController";
 
 let router = express.Router();
 
@@ -20,7 +22,8 @@ let initWebRoutes = (app) => {
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
 
-    router.post('/api/create-flashcards', flashcardController.handleCreateFlashcard);
+    router.post('/api/create-flashcards', setFlashcardController.handleCreateFlashcards);
+    router.post('/api/create-flashcard', flashcardController.handleCreateFlashcard);
 
     return app.use("/", router);
 }

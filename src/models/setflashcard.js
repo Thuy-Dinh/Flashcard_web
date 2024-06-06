@@ -15,7 +15,6 @@ module.exports = (sequelize, DataTypes) => {
     };
     Setflashcard.init({
         userId: DataTypes.INTEGER,
-        flashcardId: DataTypes.STRING,
         title: DataTypes.STRING,
         topic: DataTypes.STRING
     }, {
