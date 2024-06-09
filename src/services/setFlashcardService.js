@@ -56,6 +56,67 @@ let checkFlashcardTitle = (userId, flashcardTitle) => {
     });
 }
 
+let handleGetFlashcards = (userId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let flashcards = '';
+            // console.log(userId);
+            if(userId) {
+                flashcards = await db.Setflashcard.findAll({
+                    where: {userId: userId}
+                })
+            } 
+            resolve(flashcards)
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
+let handleDelFlashcards = (flashcardsId) =>{
+    return new Promise(async(resolve, reject) => {
+        try {
+            let flashcardsDel = {};
+            await handleDelAllFlashcard(flashcardsId);
+            let flashcards = await db.Setflashcard.findOne({
+                where: { id: flashcardsId },
+                raw: false
+            })
+            if (flashcards) {
+                flashcardsDel.errCode = 0;
+                flashcardsDel.errMessage = 'ok';
+                flashcardsDel.flashcards = await flashcards.destroy();
+            }
+            else {
+                flashcardsDel.errCode = 1;
+                flashcardsDel.errMessage = 'Không tìm thấy bộ flashcard cần xóa';
+            }
+    
+            resolve(flashcardsDel);
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let handleDelAllFlashcard = (id) => {
+    return new Promise( async(resolve, reject) => {
+        try {
+            await db.Flashcard.destroy({
+                where: { setFlashcardId: id }
+            })
+                
+            resolve();
+            
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     handleCreateNewFlashcards: handleCreateNewFlashcards,
+    handleGetFlashcards: handleGetFlashcards,
+    handleDelFlashcards: handleDelFlashcards
 }

@@ -22,8 +22,19 @@ let initWebRoutes = (app) => {
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-users', userController.handleGetAllUsers);
 
+    router.post('/api/signup', userController.handleSignup);
+
+    router.post('/api/edit-user', userController.handleEditUser);
+    router.post('/api/delete-user', userController.handleDeleteUser);
+
     router.post('/api/create-flashcards', setFlashcardController.handleCreateFlashcards);
     router.post('/api/create-flashcard', flashcardController.handleCreateFlashcard);
+
+    router.get('/api/get-all-flashcards', setFlashcardController.handleGetAllFlashcards);
+    router.get('/api/get-a-flashcards', flashcardController.handleGetOneFlashcards);
+
+    router.post('/api/delete-flashcards', setFlashcardController.handleDeleteFlashcards);
+
 
     return app.use("/", router);
 }

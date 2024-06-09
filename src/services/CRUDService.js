@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'; // su dung de bam password
 import db from "../models/index";
+import { raw } from 'body-parser';
 
 const salt = bcrypt.genSaltSync(10);
 
@@ -80,7 +81,8 @@ let updateUserData = async(data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let user = await db.User.findOne({
-                where: { id: data.id }
+                where: { id: data.id },
+                raw: false
             })
             if (user) {
                 user.firstName = data.firstName;

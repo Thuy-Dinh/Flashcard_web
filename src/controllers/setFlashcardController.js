@@ -23,27 +23,49 @@ let handleCreateFlashcards = async (req, res) => {
     });
 };
 
-// let handleGetAllUsers = async(req, res) => {
-//     let id = req.query.id; // All, Single(sửa)
+let handleGetAllFlashcards = async(req, res) => {
+    let id = req.query.id; 
+    // console.log(id);
+    let flashcards = await setFlashcardService.handleGetFlashcards(id);
 
-//     if(!id) {
-//         return res.status(200).json({
-//             errCode: 1,
-//             errMessage: 'Missing required parameter',
-//             users: []
-//         })
-//     }
+    if(!id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'người dùng không hợp lệ',
+            flashcards: []
+        })
+    }
 
-//     let users = await userService.getAllUsers(id);
 
-//     return res.status(200).json({
-//         errCode: 0,
-//         errMessage: 'Ok',
-//         users
-//     })
-// }
+    return res.status(200).json({
+        errCode: 0,
+        errMessage: 'Ok',
+        flashcards
+    })
+}
+
+let handleDeleteFlashcards = async(req, res) => {
+    let id = req.body.id;
+
+    if (!id) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Không tìm thấy bộ flashcard!'
+        });
+    }
+
+    let flashcardsDeleted = await setFlashcardService.handleDelFlashcards(id);
+    console.log(flashcardsDeleted);
+
+    return res.status(200).json({
+        errCode: flashcardsDeleted.errCode,
+        message: flashcardsDeleted.errMessage,
+        flashcards: flashcardsDeleted.flashcards 
+    });
+}
 
 module.exports = {
     handleCreateFlashcards: handleCreateFlashcards,
-    // handleGetAllUsers: handleGetAllUsers
+    handleGetAllFlashcards: handleGetAllFlashcards,
+    handleDeleteFlashcards: handleDeleteFlashcards
 };

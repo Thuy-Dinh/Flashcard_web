@@ -25,10 +25,7 @@ let handleCreateNewFlashcard = (setFlashcardId, terminology, identify) => {
                     newFlashcard.errCode = 1;
                     newFlashcard.errMessage = 'flashcard đã tồn tại';
                 }
-            } else {
-                newFlashcard.errCode = 2;
-                newFlashcard.errMessage = 'Dữ liệu không hợp lệ';
-            }
+            } 
             resolve(newFlashcard);
         } catch (e) {
             reject(e);
@@ -58,6 +55,30 @@ let checkFlashcardExists = (setFlashcardId, terminology, identify) => {
     });
 }
 
+let handleGetAFlashcards = (setFlashcardId) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let flashcard = {};
+            if(setFlashcardId) {
+                flashcard = await db.Flashcard.findAll({
+                    where: {setFlashcardId: setFlashcardId}
+                })
+            } 
+            if (flashcard.length === 0) {
+                flashcard.errCode = 1;
+                flashcard.errMessage = 'Bộ flashcard không tồn tại';
+            } else {
+                flashcard.errCode = 0;
+                flashcard.errMessage = 'ok';
+            }
+            resolve(flashcard);
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     handleCreateNewFlashcard: handleCreateNewFlashcard,
+    handleGetAFlashcards: handleGetAFlashcards
 }
