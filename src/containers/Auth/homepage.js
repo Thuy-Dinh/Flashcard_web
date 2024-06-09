@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { withRouter } from 'react-router-dom'; 
 import Header from '../Header/Header';
 import './homepage.scss';
 
 class Flashcard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            redirectToFlashcard: false // Trạng thái để điều hướng
-        }
     }
 
-    handleNavigateToFlashcard = () => {
-        this.setState({ redirectToFlashcard: true }); // Thay đổi trạng thái khi bấm vào <div>
+    hanleRedirectToFlashcard = () => {
+        this.props.history.push('/flashcard');
     }
 
     render() {
-        if (this.state.redirectToFlashcard) {
-            return <Redirect to='/flashcard' />; // Sử dụng Redirect để điều hướng
-        }
 
         return (
             <>
@@ -36,7 +30,7 @@ class Flashcard extends Component {
                                 <div className='search-img'></div>
                                 <div className='item-title'>Tìm kiếm bộ Flash yêu thích</div>
                             </div>
-                            <div className='item-content' onClick={this.handleNavigateToFlashcard}>
+                            <div className='item-content' onClick={this.hanleRedirectToFlashcard}>
                                 <div className='flashcard-img'></div>
                                 <div className='item-title'>Tạo bộ thẻ flash</div>
                             </div>
@@ -66,4 +60,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(Flashcard);
+export default withRouter(connect(mapStateToProps)(Flashcard));

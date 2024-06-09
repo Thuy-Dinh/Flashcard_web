@@ -5,7 +5,10 @@ export const path = {
     HOMEPAGE: '/home',
     LOG_OUT: '/logout',
     // SYSTEM: '/system'
-    USERMANAGE: '/usermanage'
+    USERMANAGE: '/usermanage',
+    FLASHCARD: '/flashcard',
+    LIBRARY: '/library',
+    DISPLAY: '/displayFlashcard'
 };
 
 export const languages = {

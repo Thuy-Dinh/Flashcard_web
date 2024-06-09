@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import { push } from "connected-react-router";
 // import * as actions from "../../store/actions"; //redux
 import './signup.scss';
+import { handleSignupApi } from '../../services/userService';
+import { withRouter } from 'react-router-dom';
+
 // import { FormattedMessage } from 'react-intl';
 
 class Signup extends Component {
@@ -12,7 +15,8 @@ class Signup extends Component {
             username: '',
             email: '',
             password: '',
-            isShowPassword: false
+            isShowPassword: false,
+            errMessage: ''
         }
     }
 
@@ -32,9 +36,28 @@ class Signup extends Component {
             password: event.target.value
         })
     }
-    handleSignup = () => {
-        console.log('username', this.state.username, 'email: ', this.state.email, 'password: ', this.state.password)
-        console.log('all state: ', this.state)
+    handleSignup = async() => {
+        this.setState({
+            errMessage: ''
+        });
+        try {
+            let data = await handleSignupApi(this.state.username, this.state.email, this.state.password);
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message
+                });
+            } else {
+                this.props.history.push('/login');
+            }
+        } catch (error) {
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    });
+                }
+            }
+        }
     }
     handleShowHidePassword = () => {
         this.setState({
@@ -44,6 +67,7 @@ class Signup extends Component {
     handleLoginRedirect = () => {
         this.props.navigate('/login');
     }
+    
     render() {
         return (
             <div className='signup-background'>
@@ -84,6 +108,9 @@ class Signup extends Component {
                                     <i class={this.state.isShowPassword ? 'far fa-eye' : 'far fa-eye-slash'}></i>
                                 </span>
                             </div>
+                        </div>
+                        <div className='col-12' style={{ color: 'red', paddingBottom: 15 }}>
+                            {this.state.errMessage}
                         </div>
                         <div className='col-12 text-center'>
                             <button className='text-signup' onClick={() => { this.handleSignup() }}>Đăng kí</button>
@@ -130,4 +157,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Signup));

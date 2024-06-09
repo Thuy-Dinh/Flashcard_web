@@ -1,0 +1,75 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    background-color: #dcf5f0;
+    height: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    /* Ẩn thanh cuộn IE và Edge */
+    scrollbar-width: none;
+    /* Ẩn thanh cuộn Firefox */
+
+    .body::-webkit-scrollbar {
+        display: none;
+        /* Ẩn thanh cuộn trên Webkit (Chrome, Safari) */
+    }
+
+    .body-content {
+        width: 100%;
+        max-width: 1024px;
+
+        .library-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 5px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 30px;
+
+            .topic-fl {
+                font-size: 18px;
+                font-weight: 600;
+            }
+
+            .title-fl {
+                cursor: pointer;
+                font-size: 16px;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+
+            .number-fl {
+
+                .number {
+                    width: 4%;
+                    background-color: rgb(164, 237, 213);
+                    border-radius: 50%;
+                    padding: 3px;
+                    text-align: center;
+                }
+            }
+
+            .btn-del {
+                width: 10%;
+                background-color: aquamarine;
+                padding: 5px;
+                margin-bottom: 5px;
+                border-radius: 8px;
+                text-align: center;
+                cursor: pointer;
+            }
+        }
+
+    }
+}

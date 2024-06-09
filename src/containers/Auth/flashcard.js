@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 // import * as actions from "../../store/actions"; //redux
 import Header from '../Header/Header';
 import './flashcard.scss';
+import { handleCreateFlashcardsApi, handleCreateFlashcard } from '../../services/flashcardService'
+import { withRouter } from 'react-router-dom';
 // import { FormattedMessage } from 'react-intl';
 
 class Flashcard extends Component {
@@ -14,7 +16,9 @@ class Flashcard extends Component {
             title: '',
             flashcards: [
                 { id: 1, terminology: '', identify: '' }
-            ]
+            ],
+            user: JSON.parse(localStorage.getItem("persist:user")),
+            errMessage: ''
         }
     }
 
@@ -56,10 +60,44 @@ class Flashcard extends Component {
         }
     }
 
-    handleCreate = () => {
-        console.log('topic: ', this.state.topic, 'title: ', this.state.title, 'flashcards: ', this.state.flashcards);
-        // console.log('Flashcard IDs: ', this.state.flashcards.map(flashcard => flashcard.id));
-        console.log('all state: ', this.state);
+    handleCreate = async() => {
+        this.setState({
+            errMessage: ''
+        })
+        try {
+            let userInfo = JSON.parse(this.state.user.userInfo);
+            let userId = userInfo.id;
+            let flashcards = await handleCreateFlashcardsApi(userId, this.state.title, this.state.topic);
+            if(flashcards && flashcards.errCode !== 0) {
+                this.setState({
+                    errMessage: flashcards.message
+                })
+            }
+            else {
+                let flashcardsId = flashcards.flashcard.id;
+                let terminologies = this.state.flashcards.map(card => card.terminology);
+                const identifies = this.state.flashcards.map(card => card.identify);
+                for (let i = 0; i < this.state.flashcards.length; i++) {
+                    let flashcard = await handleCreateFlashcard(flashcardsId, terminologies[i], identifies[i]);
+                    if(flashcard && flashcard.errCode !== 0) {
+                        this.setState({
+                            errMessage: flashcard.message
+                        })
+                    } else {
+                        this.props.history.push('/library');
+                    }
+                }
+            }
+        } catch (error) {
+            if(error.response) {
+                if(error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
+            console.log(error.response);
+        }
     }
 
     render() {
@@ -137,6 +175,7 @@ class Flashcard extends Component {
                                 <div>+</div>
                                 <div>Thêm thẻ</div>
                             </div>
+                            <div className='col-12' style={{ color: 'red', marginTop: 15 }}>{this.state.errMessage}</div>
                             <div className='btn-create' onClick={() => { this.handleCreate() }}>Tạo</div>
                         </div>
                     </div>
@@ -160,4 +199,4 @@ const mapStateToProps = state => {
 //     };
 // };
 
-export default connect(mapStateToProps)(Flashcard);
+export default withRouter(connect(mapStateToProps)(Flashcard));

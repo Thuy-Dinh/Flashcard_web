@@ -1,0 +1,57 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    // align-items: center;
+    background-color: #dcf5f0;
+    height: 100%;
+    min-height: 100vh;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    /* Ẩn thanh cuộn IE và Edge */
+    scrollbar-width: none;
+    /* Ẩn thanh cuộn Firefox */
+
+    .body::-webkit-scrollbar {
+        display: none;
+        /* Ẩn thanh cuộn trên Webkit (Chrome, Safari) */
+    }
+
+    .body-content {
+        width: 100%;
+        max-width: 1024px;
+
+        .body-topic-fl {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 20px 0 15px;
+        }
+
+        .body-title-fl {
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .flashcard-item {
+            background-color: white;
+            border-radius: 8px;
+            padding: 5px 15px;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+    }
+}

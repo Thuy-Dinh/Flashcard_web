@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { withRouter, Redirect } from 'react-router-dom'; // Import withRouter và Redirect từ react-router-dom
 import * as actions from "../../store/actions";
-import { Redirect } from 'react-router-dom';
-// import Navigator from '../../components/Navigator';
-// import { adminMenu } from './menuApp';
 import './Header.scss';
 
 class Header extends Component {
@@ -13,16 +10,23 @@ class Header extends Component {
         this.state = {
             isFocused: false,
             searchInput: '',
-            redirectToUserManage: false
+            user: JSON.parse(localStorage.getItem("persist:user"))
         };
         this.wrapperRef = React.createRef();
     }
 
-
-    handleNavigateToUserManage = () => {
-        this.setState({ redirectToUserManage: true }); // Thay đổi trạng thái khi bấm vào <div>
+    hanleRedirectToHome = () => {
+        this.props.history.push('/home');
     }
-    
+
+    hanleRedirectToUserManage = () => {
+        this.props.history.push('/usermanage');
+    }
+
+    hanleRedirectToLibrary = () => {
+        this.props.history.push('/library');
+    }
+
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside);
     }
@@ -42,6 +46,7 @@ class Header extends Component {
             isNavigatorVisible: !prevState.isNavigatorVisible
         }));
     };
+
     handleFocus = () => {
         this.setState({ isFocused: true });
     };
@@ -60,15 +65,15 @@ class Header extends Component {
 
     render() {
         const { processLogout } = this.props;
-        const { isNavigatorVisible, isFocused, searchInput, redirectToUserManage } = this.state;
+        const { isNavigatorVisible, isFocused, searchInput } = this.state;
 
-        if (this.state.redirectToUserManage) {
-            return <Redirect to='/usermanage' />; // Sử dụng Redirect để điều hướng
-        }
+        let userInfo = JSON.parse(this.state.user.userInfo);
+        let userName = userInfo.firstName + " " + userInfo.lastName;
+        let userInitial = userInfo.firstName.charAt(0).toUpperCase();
 
         return (
             <div className="header-container">
-                <div className='header-logo'>
+                <div className='header-logo' onClick={this.hanleRedirectToHome}>
                     <div className='img-logo'></div>
                     <div className='text-logo'>Flashcards</div>
                 </div>
@@ -91,13 +96,13 @@ class Header extends Component {
                 </div>
                 <div className='header-right'>
                     <div className='header-user' onClick={this.toggleNavigator}>
-                        <div className='user-img'>T</div>
-                        <div className='user-name'>Thùy Đinh</div>
+                        <div className='user-img'>{userInitial}</div>
+                        <div className='user-name'>{userName}</div>
                     </div>
                     {isNavigatorVisible && (
-                        <div ref={this.wrapperRef} className="header-navigator" tabIndex="-1">
-                            <div className='header-item' onClick={this.handleNavigateToUserManage}>Quản lí tài khoản</div>
-                            <div className='header-item'>Thư viện</div>
+                        <div ref={this.wrapperRef} className="header-navigator">
+                            <div className='header-item' onClick={this.hanleRedirectToUserManage}>Quản lí tài khoản</div>
+                            <div className='header-item' onClick={this.hanleRedirectToLibrary}>Thư viện</div>
                             <div className='header-item'>Bộ sưu tập</div>
                             <div className='header-item' onClick={processLogout}>Đăng xuất</div>
                         </div>
@@ -121,4 +126,5 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+// Bọc component bằng withRouter để component có thể nhận được history prop
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));
