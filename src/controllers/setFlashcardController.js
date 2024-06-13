@@ -64,8 +64,28 @@ let handleDeleteFlashcards = async(req, res) => {
     });
 }
 
+let handleSearch = async(req, res) => {
+    let userId = req.query.id;
+    let request = req.query.request;
+
+    if (!userId) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Các trường dữ liệu không được để trống!'
+        });
+    }
+
+    let result = await setFlashcardService.handleSearchSV(userId, request);
+
+    return res.status(200).json({
+        data: result ? result : []
+    });
+
+}
+
 module.exports = {
     handleCreateFlashcards: handleCreateFlashcards,
     handleGetAllFlashcards: handleGetAllFlashcards,
-    handleDeleteFlashcards: handleDeleteFlashcards
+    handleDeleteFlashcards: handleDeleteFlashcards,
+    handleSearch: handleSearch
 };

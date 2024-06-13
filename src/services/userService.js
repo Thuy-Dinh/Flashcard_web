@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt'; // sử dụng để băm mật khẩu
 import db from "../models/index";
-import { raw } from 'body-parser';
 
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -183,17 +182,27 @@ let handleEdit = (useEmail, useFirstName, userLastName, userGender, userAge) => 
 
 
 let handleDelete = (useEmail) => {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             let userDel = {};
             let user = await db.User.findOne({
                 where: { email: useEmail },
                 raw: false
-            })
+            });
+
+            if (!user) {
+                userDel.errCode = 1;
+                userDel.errMessage = 'User not found';
+                return resolve(userDel);
+            }
+
             let userId = user.id;
-            console.log(userId);
+            console.log("User ID: ", userId);
+
+            // Then delete all flashcards related to the user
             await handleDelAllFlashcards(userId);
-            
+
+            // Finally delete the user
             userDel.errCode = 0;
             userDel.errMessage = 'ok';
             userDel.user = await user.destroy();
@@ -203,45 +212,71 @@ let handleDelete = (useEmail) => {
         } catch (e) {
             reject(e);
         }
-    })
+    });
 }
 
-let handleDelAllFlashcards = (id) => {
-    return new Promise( async(resolve, reject) => {
+let handleDelAllFlashcards = (userId) => {
+    return new Promise(async (resolve, reject) => {
         try {
-            let flashcards = await db.Setflashcard.findOne({
-                where: { userId: id },
+            let flashcards = await db.Setflashcard.findAll({
+                where: { userId: userId },
                 raw: false
-            })
+            });
 
-            let flashcardsId = flashcards.id;
-            console.log(flashcardsId);
+            for (let flashcard of flashcards) {
+                console.log("Deleting flashcard set with ID: ", flashcard.id);
+                await handleDelAllFlashcard(flashcard.id);
+                await handleDelAllCollections(userId, flashcard.id);
+                await flashcard.destroy();
+            }
 
-            await handleDelAllFlashcard(flashcardsId);
-
-            await flashcards.destroy();
-    
             resolve();
-            
         } catch (e) {
-            reject(e)
+            reject(e);
         }
-    })
+    });
 }
 
-let handleDelAllFlashcard = (id) => {
-    return new Promise( async(resolve, reject) => {
+let handleDelAllFlashcard = (setFlashcardId) => {
+    return new Promise(async (resolve, reject) => {
         try {
+            console.log("Deleting all flashcards with set ID: ", setFlashcardId);
             await db.Flashcard.destroy({
-                where: { setFlashcardId: id }
-            })
-                
+                where: { setFlashcardId: setFlashcardId }
+            });
+
             resolve();
-            
         } catch (e) {
-            reject(e)
+            reject(e);
         }
-    })
+    });
+}
+
+let handleDelAllCollections = (userId, flashacrdId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            const Sequelize = require('sequelize');
+            const Op = Sequelize.Op;
+
+            let collections = await db.Collection.findAll({
+                where: { [Op.or]: [
+                        { userId: userId },
+                        { setFlashcardId: flashacrdId }
+                    ] },
+                raw: false
+            });
+
+            for (let collection of collections) {
+                console.log("Deleting collection with ID: ", collection.id);
+                await collection.destroy();
+            }
+
+            resolve();
+        } catch (e) {
+            reject(e);
+        }
+    });
 }
 
 module.exports = {

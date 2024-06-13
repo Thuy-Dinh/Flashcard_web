@@ -18,11 +18,15 @@ module.exports = {
                 },
                 allowNull: false,
             },
-            topic: {
-                type: Sequelize.STRING
-            },
-            quantity: {
-                type: Sequelize.INTEGER
+            userId: {
+                type: Sequelize.INTEGER,
+                references: {
+                    model: {
+                      tableName: 'users'
+                    },
+                    key: 'id',
+                },
+                allowNull: false,
             },
             createdAt: {
                 allowNull: false,

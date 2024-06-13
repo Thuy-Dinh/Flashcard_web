@@ -3,6 +3,7 @@ import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 import setFlashcardController from "../controllers/setFlashcardController";
 import flashcardController from "../controllers/flashcardController";
+import collectionController from "../controllers/collectionController";
 
 let router = express.Router();
 
@@ -35,7 +36,12 @@ let initWebRoutes = (app) => {
 
     router.post('/api/delete-flashcards', setFlashcardController.handleDeleteFlashcards);
 
+    router.get('/api/search', setFlashcardController.handleSearch);
 
+    router.post('/api/create-collection', collectionController.collectionFlashcards);
+    router.post('/api/display-collection', collectionController.getAllCollection);
+    router.post('/api/delete-collection', collectionController.delCollection);
+    
     return app.use("/", router);
 }
 

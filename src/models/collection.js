@@ -15,8 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     };
     Collection.init({
         setFlashcardId: DataTypes.INTEGER,
-        topic: DataTypes.STRING,
-        quantity: DataTypes.INTEGER
+        userId: DataTypes.INTEGER,
     }, {
         sequelize,
         modelName: 'Collection',
