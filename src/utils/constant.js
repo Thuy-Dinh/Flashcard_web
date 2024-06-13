@@ -8,7 +8,9 @@ export const path = {
     USERMANAGE: '/usermanage',
     FLASHCARD: '/flashcard',
     LIBRARY: '/library',
-    DISPLAY: '/displayFlashcard'
+    DISPLAY: '/displayFlashcard',
+    RESULT: '/searchResult',
+    COLLECTION: '/collection'
 };
 
 export const languages = {

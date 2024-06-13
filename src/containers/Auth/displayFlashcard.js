@@ -22,6 +22,7 @@ class DisplayFlashcard extends Component {
             this.setState({ flashcardId });
 
             let response = await handleGetAFlashcardsApi(flashcardId);
+            console.log(response);
             if(response && response.errCode === 0) {
                 let flippedCards = {}; // Khởi tạo trạng thái lật của từng flashcard
                 response.flashcard.forEach(card => {

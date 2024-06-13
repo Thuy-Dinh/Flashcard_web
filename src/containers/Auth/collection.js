@@ -1,29 +1,14 @@
 import React, { Component } from 'react';
 import Header from '../Header/Header';
-import './library.scss';
-import { handleGetAllFlashcardsApi, handleDelFlashcardsApi } from '../../services/flashcardService';
+import './collection.scss';
+import { handleGetAllCollectionApi, handleDelCollectionApi } from '../../services/collectionService';
 
 class Flashcard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: JSON.parse(localStorage.getItem("persist:user")),
-            arrFlashcards: []
-        }
-    }
-
-    async componentDidMount() {
-        this.loadFlashcards();
-    }
-
-    loadFlashcards = async () => {
-        let userInfo = JSON.parse(this.state.user.userInfo);
-        let userId = userInfo.id;
-        let response = await handleGetAllFlashcardsApi(userId);
-        if(response && response.errCode === 0) {
-            this.setState({
-                arrFlashcards: response.flashcards
-            });
+            arrCollection: [],
+            user: JSON.parse(localStorage.getItem("persist:user"))
         }
     }
 
@@ -34,8 +19,24 @@ class Flashcard extends Component {
         });
     }
 
-    handleDelFlashcards = async (flashcardId) => {
-        let response = await handleDelFlashcardsApi(flashcardId);
+    async componentDidMount() {
+        this.loadFlashcards();
+    }
+
+    loadFlashcards = async () => {
+        let userInfo = JSON.parse(this.state.user.userInfo);
+        let userId = userInfo.id;
+        console.log(userId);
+
+        let collections = await handleGetAllCollectionApi(userId);
+
+        this.setState({
+            arrCollection: collections.collections
+        })
+    }
+
+    handleDelCollection = async(collectionId) => {
+        let response = await handleDelCollectionApi(collectionId);
         if(response && response.errCode === 0) {
             // Reload flashcards after successful deletion
             this.loadFlashcards();
@@ -46,28 +47,28 @@ class Flashcard extends Component {
     }
 
     render() {
-        let userInfo = JSON.parse(this.state.user.userInfo);
-        let userName = userInfo.firstName + " " + userInfo.lastName;
-        let arrFlashcards = this.state.arrFlashcards;
+
+        let arrCollection = this.state.arrCollection;
+        
         return (
             <>
                 <Header />
                 <div className='body'>
                     <div className='body-content'>
-                        <div className='body-title'>LIBRARY</div>
+                        <div className='body-title'>COLLECTIONS</div>
                         <div className='body-library'>
                             {
-                                arrFlashcards && arrFlashcards.map((item, index) => {
+                                arrCollection && arrCollection.map((item, index) => {
                                     return (
                                         <div className='library-item' key={index} >
                                             <div className='library-content'>
                                                 <div className='topic-fl'>{item.topic}</div>
-                                                <div className='title-fl' onClick={() => this.handleRedirect(item.id, item.topic, item.title)}>{item.title}</div>
-                                                <div className='author'>{userName}</div>
+                                                <div className='title-fl' onClick={() => this.handleRedirect(item.flashcardId, item.topic, item.title)}>{item.title}</div>
+                                                <div className='author'>{item.userName}</div>
                                             </div>
                                             <div className='number-fl'>
                                                 <div className='number'>{item.quantity}</div>
-                                                <div className='btn-del' onClick={() => this.handleDelFlashcards(item.id)}>Xóa</div>
+                                                <div className='btn-del' onClick={() => this.handleDelCollection(item.id)}>Xóa</div>
                                             </div>
                                         </div>
                                     )

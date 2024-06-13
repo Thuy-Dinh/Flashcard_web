@@ -18,6 +18,8 @@ import UserManage from './System/UserManage';
 import Flashcard from './Auth/flashcard';
 import Library from './Auth/library';
 import Display from './Auth/displayFlashcard';
+import Result from './Auth/searchResult';
+import Collection from './Auth/collection';
 // import Login from '../routes/Login';
 // import Header from './Header/Header';
 // import System from '../routes/System';
@@ -66,6 +68,8 @@ class App extends Component {
                                     <Route path={path.FLASHCARD} component={userIsAuthenticated(Flashcard)} />
                                     <Route path={path.LIBRARY} component={userIsAuthenticated(Library)} />
                                     <Route path={path.DISPLAY} component={userIsAuthenticated(Display)} />
+                                    <Route path={path.RESULT} component={userIsAuthenticated(Result)} />
+                                    <Route path={path.COLLECTION} component={userIsAuthenticated(Collection)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>

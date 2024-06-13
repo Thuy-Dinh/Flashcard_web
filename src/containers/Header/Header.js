@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router-dom'; // Import withRouter và Redirect từ react-router-dom
+import { withRouter } from 'react-router-dom';
 import * as actions from "../../store/actions";
 import './Header.scss';
 
 class Header extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
         this.state = {
             isFocused: false,
             searchInput: '',
-            user: JSON.parse(localStorage.getItem("persist:user"))
+            user: JSON.parse(localStorage.getItem("persist:user")),
         };
         this.wrapperRef = React.createRef();
     }
@@ -25,6 +26,10 @@ class Header extends Component {
 
     hanleRedirectToLibrary = () => {
         this.props.history.push('/library');
+    }
+
+    hanleRedirectToCollection = () => {
+        this.props.history.push('/collection');
     }
 
     componentDidMount() {
@@ -63,6 +68,19 @@ class Header extends Component {
         this.setState({ searchInput: '' });
     };
 
+    handleSearch = (request) => {
+        this.props.history.push({
+            pathname: '/searchResult',
+            search: `?request=${request}`
+        });
+    };
+
+    handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            this.handleSearch(this.state.searchInput);
+        }
+    };
+
     render() {
         const { processLogout } = this.props;
         const { isNavigatorVisible, isFocused, searchInput } = this.state;
@@ -86,12 +104,13 @@ class Header extends Component {
                             onFocus={this.handleFocus}
                             onBlur={this.handleBlur}
                             onChange={this.handleInputChange}
+                            onKeyDown={this.handleKeyDown}
                         >
                         </input>
                         {isFocused && searchInput && (
                             <i className='fas fa-times clear-icon' onMouseDown={this.handleClearInput}></i>
                         )}
-                        <i className='fas fa-search search-icon'></i>
+                        <i className='fas fa-search search-icon' onClick={() => {this.handleSearch(searchInput)}}></i>
                     </div>
                 </div>
                 <div className='header-right'>
@@ -103,7 +122,7 @@ class Header extends Component {
                         <div ref={this.wrapperRef} className="header-navigator">
                             <div className='header-item' onClick={this.hanleRedirectToUserManage}>Quản lí tài khoản</div>
                             <div className='header-item' onClick={this.hanleRedirectToLibrary}>Thư viện</div>
-                            <div className='header-item'>Bộ sưu tập</div>
+                            <div className='header-item' onClick={this.hanleRedirectToCollection}>Bộ sưu tập</div>
                             <div className='header-item' onClick={processLogout}>Đăng xuất</div>
                         </div>
                     )}
@@ -111,7 +130,6 @@ class Header extends Component {
             </div>
         );
     }
-
 }
 
 const mapStateToProps = state => {
@@ -126,5 +144,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-// Bọc component bằng withRouter để component có thể nhận được history prop
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

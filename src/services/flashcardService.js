@@ -20,4 +20,15 @@ const handleDelFlashcardsApi = (flashcardsId) => {
     return axios.post('/api/delete-flashcards', {id: flashcardsId})
 }
 
-export { handleCreateFlashcardsApi, handleCreateFlashcard, handleGetAllFlashcardsApi, handleGetAFlashcardsApi, handleDelFlashcardsApi }
+const handleSearchApi = (userId, querySearch) => {
+    return axios.get(`/api/search?id=${userId}&request=${querySearch}`)
+} 
+
+export { 
+    handleCreateFlashcardsApi, 
+    handleCreateFlashcard, 
+    handleGetAllFlashcardsApi, 
+    handleGetAFlashcardsApi, 
+    handleDelFlashcardsApi, 
+    handleSearchApi  
+}
