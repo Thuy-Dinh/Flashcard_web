@@ -24,11 +24,31 @@ const handleSearchApi = (userId, querySearch) => {
     return axios.get(`/api/search?id=${userId}&request=${querySearch}`)
 } 
 
+const handleRecommendSearchApi = (userId, querySearch) => {
+    return axios.post('/api/recommend-searchResult', {id: userId, request: querySearch})
+}
+
+const handleEditFlashcardsApi = (id, topic, title)=> {
+    return axios.get(`/api/edit-flashcards?id=${id}&topic=${topic}&title=${title}`)
+}
+
+const handleEditFlashcardApi = (id, terminology, identify)=> {
+    return axios.get(`/api/edit-flashcard?id=${id}&terminology=${terminology}&identify=${identify}`)
+}
+
+const handleDelAFlashcardApi = (id) => {
+    return axios.post('/api/delete-a-flashcard', {id})
+}
+
 export { 
     handleCreateFlashcardsApi, 
     handleCreateFlashcard, 
     handleGetAllFlashcardsApi, 
     handleGetAFlashcardsApi, 
     handleDelFlashcardsApi, 
-    handleSearchApi  
+    handleSearchApi,
+    handleRecommendSearchApi,
+    handleEditFlashcardsApi,
+    handleEditFlashcardApi,
+    handleDelAFlashcardApi
 }

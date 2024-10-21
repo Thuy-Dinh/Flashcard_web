@@ -144,13 +144,6 @@ const mapStateToProps = state => {
     };
 };
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         navigate: (path) => dispatch(push(path)),
-//         adminSignupSuccess: (adminInfo) => dispatch(actions.adminSignupSuccess(adminInfo)),
-//         adminSignupFail: () => dispatch(actions.adminSignupFail()),
-//     };
-// };
 const mapDispatchToProps = dispatch => {
     return {
         navigate: (path) => dispatch(push(path))

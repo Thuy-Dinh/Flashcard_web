@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-// import { connect } from 'react-redux';
-import Header from '../Header/Header';
+import { connect } from 'react-redux';
+import Header from '../Auth/hearder';
 import './searchResult.scss';
 import { handleSearchApi } from '../../services/flashcardService';
 import { handleCreateCollectionApi } from "../../services/collectionService";
@@ -11,7 +11,6 @@ class Flashcard extends Component {
         this.state = {
             arrResult: [],
             request: null,
-            user: JSON.parse(localStorage.getItem("persist:user")),
             errMessage: '',
             selectedFlashcardId: null
         }
@@ -30,11 +29,12 @@ class Flashcard extends Component {
     handleSearch = async () => {
         let queryParams = new URLSearchParams(this.props.location.search);
         let request = queryParams.get('request');
+        console.log(request);
         if (request) {
             this.setState({ request });
-            let userInfo = JSON.parse(this.state.user.userInfo);
-            let userId = userInfo.id;
+            let userId = this.props.userInfo.id;
             let result = await handleSearchApi(userId, request);
+            console.log(result);
             if (result && result.data) { // Kiểm tra nếu result và result.data tồn tại
                 this.setState({
                     arrResult: Array.isArray(result.data) ? result.data : [] // Đảm bảo rằng arrResult luôn là một mảng
@@ -50,8 +50,7 @@ class Flashcard extends Component {
         })
 
         try {
-            let userInfo = JSON.parse(this.state.user.userInfo);
-            let userId = userInfo.id;
+            let userId = this.props.userInfo.id;
 
             let collection = await handleCreateCollectionApi(flashcardId, userId);
             if(collection && collection.errCode !== 0) {
@@ -75,10 +74,10 @@ class Flashcard extends Component {
         
     }
 
-    handleRedirect = (flashcardId, topic, title) => {
+    handleRedirect = (flashcardId, topic, title, userName, quantity) => {
         this.props.history.push({
             pathname: '/displayFlashcard',
-            search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}`
+            search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}&username=${userName}&quantity=${quantity}`
         });
     }
 
@@ -93,7 +92,7 @@ class Flashcard extends Component {
                 <Header />
                 <div className='body'>
                     <div className='body-content'>
-                        <div className='search-title'>RESULT: {request}</div>
+                        <div className='search-title'>Tìm kiếm: {request}</div>
                         <div className='search-result'>
                             {
                                 arrResult.length > 0 ? (
@@ -102,7 +101,7 @@ class Flashcard extends Component {
                                         <div className='result-item'>
                                             <div className='result-content'>
                                                 <div className='topic-result'>{item.topic}</div>
-                                                <div className='title-result' onClick={() => this.handleRedirect(item.flashcardsId, item.topic, item.title)}>{item.title}</div>
+                                                <div className='title-result' onClick={() => this.handleRedirect(item.flashcardsId, item.topic, item.title, item.userName, item.quantity)}>{item.title}</div>
                                                 <div className='author'>{item.userName}</div>
                                             </div>
                                             <div className='number-fl'>
@@ -126,4 +125,10 @@ class Flashcard extends Component {
     }
 }
 
-export default Flashcard;
+const mapStateToProps = state => {
+    return {
+        userInfo: state.user.userInfo
+    };
+};
+
+export default connect(mapStateToProps)(Flashcard);

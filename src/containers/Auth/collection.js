@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header';
+import { connect } from 'react-redux';
+import Header from '../Auth/hearder';
 import './collection.scss';
 import { handleGetAllCollectionApi, handleDelCollectionApi } from '../../services/collectionService';
 
@@ -8,14 +9,13 @@ class Flashcard extends Component {
         super(props);
         this.state = {
             arrCollection: [],
-            user: JSON.parse(localStorage.getItem("persist:user"))
         }
     }
 
-    handleRedirect = (flashcardId, topic, title) => {
+    handleRedirect = (flashcardId, topic, title, userName, quantity) => {
         this.props.history.push({
             pathname: '/displayFlashcard',
-            search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}`
+            search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}&username=${userName}&quantity=${quantity}`
         });
     }
 
@@ -24,9 +24,7 @@ class Flashcard extends Component {
     }
 
     loadFlashcards = async () => {
-        let userInfo = JSON.parse(this.state.user.userInfo);
-        let userId = userInfo.id;
-        console.log(userId);
+        let userId = this.props.userInfo.id;
 
         let collections = await handleGetAllCollectionApi(userId);
 
@@ -55,7 +53,7 @@ class Flashcard extends Component {
                 <Header />
                 <div className='body'>
                     <div className='body-content'>
-                        <div className='body-title'>COLLECTIONS</div>
+                        <div className='body-title'>Bộ sưu tập</div>
                         <div className='body-library'>
                             {
                                 arrCollection && arrCollection.map((item, index) => {
@@ -63,7 +61,7 @@ class Flashcard extends Component {
                                         <div className='library-item' key={index} >
                                             <div className='library-content'>
                                                 <div className='topic-fl'>{item.topic}</div>
-                                                <div className='title-fl' onClick={() => this.handleRedirect(item.flashcardId, item.topic, item.title)}>{item.title}</div>
+                                                <div className='title-fl' onClick={() => this.handleRedirect(item.flashcardId, item.topic, item.title, item.userName, item.quantity)}>{item.title}</div>
                                                 <div className='author'>{item.userName}</div>
                                             </div>
                                             <div className='number-fl'>
@@ -82,4 +80,10 @@ class Flashcard extends Component {
     }
 }
 
-export default (Flashcard);
+const mapStateToProps = state => {
+    return {
+        userInfo: state.user.userInfo
+    };
+};
+
+export default connect(mapStateToProps)(Flashcard);

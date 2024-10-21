@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// import { push } from "connected-react-router";
-// import * as actions from "../../store/actions"; //redux
-import Header from '../Header/Header';
+import Header from '../Auth/hearder';
 import './flashcard.scss';
 import { handleCreateFlashcardsApi, handleCreateFlashcard } from '../../services/flashcardService'
 import { withRouter } from 'react-router-dom';
-// import { FormattedMessage } from 'react-intl';
 
 class Flashcard extends Component {
     constructor(props) {
@@ -17,7 +14,6 @@ class Flashcard extends Component {
             flashcards: [
                 { id: 1, terminology: '', identify: '' }
             ],
-            user: JSON.parse(localStorage.getItem("persist:user")),
             errMessage: ''
         }
     }
@@ -65,8 +61,7 @@ class Flashcard extends Component {
             errMessage: ''
         })
         try {
-            let userInfo = JSON.parse(this.state.user.userInfo);
-            let userId = userInfo.id;
+            let userId = this.props.userInfo.id;
             let flashcards = await handleCreateFlashcardsApi(userId, this.state.title, this.state.topic);
             if(flashcards && flashcards.errCode !== 0) {
                 this.setState({
@@ -187,7 +182,7 @@ class Flashcard extends Component {
 
 const mapStateToProps = state => {
     return {
-        language: state.app.language
+        userInfo: state.user.userInfo
     };
 };
 

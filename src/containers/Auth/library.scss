@@ -39,6 +39,7 @@
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
+                width: 50%;
     
                 .topic-fl {
                     font-size: 18px;
@@ -53,6 +54,14 @@
                         text-decoration: underline;
                     }
                 }
+
+                .number {
+                    width: 7%;
+                    background-color: rgb(164, 237, 213);
+                    border-radius: 50%;
+                    padding: 5px;
+                    text-align: center;
+                }
     
             }
                 
@@ -63,21 +72,24 @@
                 justify-content: space-around;
                 align-items: center;
 
-                .number {
-                    width: 35%;
-                    background-color: rgb(164, 237, 213);
-                    border-radius: 50%;
-                    padding: 5px;
-                    text-align: center;
-                }
+                
     
-                .btn-del {
-                    width: 100%;
-                    background-color: aquamarine;
-                    padding: 5px 35px;
-                    border-radius: 8px;
-                    text-align: center;
-                    cursor: pointer;
+                .btn {
+
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    gap: 20px;
+
+                    .btn-del {
+                        width: 100%;
+                        background-color: aquamarine;
+                        padding: 5px 35px;
+                        border-radius: 8px;
+                        text-align: center;
+                        cursor: pointer;
+                        line-height: 21px;
+                    }
                 }
 
             }

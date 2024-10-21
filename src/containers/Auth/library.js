@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header';
+import Header from '../Auth/hearder';
+import { connect } from 'react-redux';
 import './library.scss';
 import { handleGetAllFlashcardsApi, handleDelFlashcardsApi } from '../../services/flashcardService';
 
@@ -7,7 +8,6 @@ class Flashcard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: JSON.parse(localStorage.getItem("persist:user")),
             arrFlashcards: []
         }
     }
@@ -17,8 +17,7 @@ class Flashcard extends Component {
     }
 
     loadFlashcards = async () => {
-        let userInfo = JSON.parse(this.state.user.userInfo);
-        let userId = userInfo.id;
+        let userId = this.props.userInfo.id;
         let response = await handleGetAllFlashcardsApi(userId);
         if(response && response.errCode === 0) {
             this.setState({
@@ -27,9 +26,16 @@ class Flashcard extends Component {
         }
     }
 
-    handleRedirect = (flashcardId, topic, title) => {
+    handleRedirectToDisplay = (flashcardId, topic, title, userName, quantity) => {
         this.props.history.push({
             pathname: '/displayFlashcard',
+            search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}&username=${userName}&quantity=${quantity}`
+        });
+    }
+
+    handleRedirectToEdit = (flashcardId, topic, title) => {
+        this.props.history.push({
+            pathname: '/editFlashcard',
             search: `?flashcardId=${flashcardId}&topic=${topic}&title=${title}`
         });
     }
@@ -46,7 +52,7 @@ class Flashcard extends Component {
     }
 
     render() {
-        let userInfo = JSON.parse(this.state.user.userInfo);
+        const { userInfo } = this.props;
         let userName = userInfo.firstName + " " + userInfo.lastName;
         let arrFlashcards = this.state.arrFlashcards;
         return (
@@ -54,7 +60,7 @@ class Flashcard extends Component {
                 <Header />
                 <div className='body'>
                     <div className='body-content'>
-                        <div className='body-title'>LIBRARY</div>
+                        <div className='body-title'>Thư viện</div>
                         <div className='body-library'>
                             {
                                 arrFlashcards && arrFlashcards.map((item, index) => {
@@ -62,12 +68,15 @@ class Flashcard extends Component {
                                         <div className='library-item' key={index} >
                                             <div className='library-content'>
                                                 <div className='topic-fl'>{item.topic}</div>
-                                                <div className='title-fl' onClick={() => this.handleRedirect(item.id, item.topic, item.title)}>{item.title}</div>
+                                                <div className='title-fl' onClick={() => this.handleRedirectToDisplay(item.id, item.topic, item.title, userName, item.quantity)}>{item.title}</div>
                                                 <div className='author'>{userName}</div>
+                                                <div className='number'>{item.quantity}</div>
                                             </div>
                                             <div className='number-fl'>
-                                                <div className='number'>{item.quantity}</div>
-                                                <div className='btn-del' onClick={() => this.handleDelFlashcards(item.id)}>Xóa</div>
+                                                <div className='btn'>
+                                                    <div className='btn-del' onClick={() => this.handleRedirectToEdit(item.id, item.topic, item.title)}>Sửa</div>
+                                                    <div className='btn-del' onClick={() => this.handleDelFlashcards(item.id)}>Xóa</div>
+                                                </div>
                                             </div>
                                         </div>
                                     )
@@ -81,4 +90,10 @@ class Flashcard extends Component {
     }
 }
 
-export default (Flashcard);
+const mapStateToProps = state => {
+    return {
+        userInfo: state.user.userInfo
+    };
+};
+
+export default connect(mapStateToProps)(Flashcard);

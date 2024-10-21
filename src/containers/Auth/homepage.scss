@@ -4,22 +4,11 @@
     padding: 0;
 }
 
-.body {
+.body-container {
     display: flex;
     justify-content: center;
-    // align-items: center;
     background-color: #dcf5f0;
     height: 100%;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    /* Ẩn thanh cuộn IE và Edge */
-    scrollbar-width: none;
-    /* Ẩn thanh cuộn Firefox */
-
-    .body::-webkit-scrollbar {
-        display: none;
-        /* Ẩn thanh cuộn trên Webkit (Chrome, Safari) */
-    }
 
     .body-content {
         width: 100%;
@@ -40,7 +29,6 @@
                 border-radius: 8px;
                 display: flex;
                 flex-direction: column;
-                cursor: pointer;
                 .search-img {
                     background: url('../../assets/images/search_img.png');
                 }
@@ -61,6 +49,28 @@
                     padding: 5px 20px;
                     font-size: 16px;
                     font-weight: 600;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 12px;
+                    cursor: pointer;
+                    .item-subtitle {
+                        font-size: 16px;
+                        font-weight: 500;
+                        text-decoration-line: underline;
+                    }
+                    .item-info {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+                    .item-quantity {
+                        font-size: 14px;
+                        font-weight: 500;
+                        width: 50%;
+                        background-color: rgb(164, 237, 213);
+                        border-radius: 8px;
+                        padding: 5px;
+                        text-align: center;
+                    }
                 }
             }
             .icon-plus {

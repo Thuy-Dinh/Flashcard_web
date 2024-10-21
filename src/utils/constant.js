@@ -4,13 +4,13 @@ export const path = {
     SIGNUP: '/signup',
     HOMEPAGE: '/home',
     LOG_OUT: '/logout',
-    // SYSTEM: '/system'
     USERMANAGE: '/usermanage',
     FLASHCARD: '/flashcard',
     LIBRARY: '/library',
     DISPLAY: '/displayFlashcard',
     RESULT: '/searchResult',
-    COLLECTION: '/collection'
+    COLLECTION: '/collection',
+    EDIT: '/editFlashcard'
 };
 
 export const languages = {

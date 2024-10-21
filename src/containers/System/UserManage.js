@@ -11,7 +11,6 @@ class UserManage extends Component {
         super(props);
         this.state = {
             arrUsers: {},
-            persistUser: JSON.parse(localStorage.getItem("persist:user"))
         }
     }
 
@@ -20,8 +19,7 @@ class UserManage extends Component {
     }
 
     loadUsers = async () => {
-        let userInfo = JSON.parse(this.state.persistUser.userInfo);
-        let userId = userInfo.id;
+        let userId = this.props.userInfo.id;
         if (userId) {
             let response = await getAllUsers(userId);
             if (response && response.errCode === 0) {
@@ -90,22 +88,22 @@ class UserManage extends Component {
                                 <input type="email" className="form-control" name="email" placeholder="Email" value={arrUsers.email} readOnly></input>
                             </div>
                             <div className="input-info">
-                                <label htmlFor="inputFirstName">First name</label>
+                                <label htmlFor="inputFirstName">Họ</label>
                                 <input type="text" className="form-control" name="firstName" placeholder="First name" value={arrUsers.firstName} onChange={this.handleInputChange}></input>
                             </div>
                             <div className="input-info">
-                                <label htmlFor="inputLastName">Last name</label>
+                                <label htmlFor="inputLastName">Tên</label>
                                 <input type="text" className="form-control" name="lastName" placeholder="Last name" value={arrUsers.lastName} onChange={this.handleInputChange}></input>
                             </div>
                             <div className="input-info">
-                                <label htmlFor="inputGender">Gender</label>
+                                <label htmlFor="inputGender">Giới tính</label>
                                 <select name="gender" className="form-control" value={arrUsers.gender} onChange={this.handleInputChange}>
                                     <option value="1">Nam</option>
                                     <option value="0">Nữ</option>
                                 </select>
                             </div>
                             <div className="input-info">
-                                <label htmlFor="inputAge">Age</label>
+                                <label htmlFor="inputAge">Tuổi</label>
                                 <input type="text" className="form-control" name="age" placeholder="18" value={arrUsers.age} onChange={this.handleInputChange}></input>
                             </div>
                         </form>
@@ -121,7 +119,9 @@ class UserManage extends Component {
 }
 
 const mapStateToProps = state => {
-    return {};
+    return {
+        userInfo: state.user.userInfo
+    };
 };
 
 const mapDispatchToProps = dispatch => {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import Header from '../Header/Header';
+import Header from '../Auth/hearder';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'; 
 import { handleGetAFlashcardsApi } from '../../services/flashcardService';
 import './displayFlashcard.scss';
@@ -17,13 +18,13 @@ class DisplayFlashcard extends Component {
     async componentDidMount() {
         let queryParams = new URLSearchParams(this.props.location.search);
         let flashcardId = queryParams.get('flashcardId');
-
+    
         if (flashcardId) {
             this.setState({ flashcardId });
-
+    
             let response = await handleGetAFlashcardsApi(flashcardId);
             console.log(response);
-            if(response && response.errCode === 0) {
+            if (response && response.errCode === 0) {
                 let flippedCards = {}; // Khởi tạo trạng thái lật của từng flashcard
                 response.flashcard.forEach(card => {
                     flippedCards[card.id] = false; // Ban đầu không có flashcard nào được lật
@@ -32,9 +33,38 @@ class DisplayFlashcard extends Component {
                     arrFlashcard: response.flashcard,
                     flippedCards
                 });
+    
+                let flashcardTopic = queryParams.get('topic');
+                let flashcardTitle = queryParams.get('title');
+                let userName = queryParams.get('username');
+                let quantity = queryParams.get('quantity');
+                let userId = this.props.userInfo.id;
+                const flashcard = {
+                    id: flashcardId,
+                    topic: flashcardTopic,
+                    title: flashcardTitle,
+                    userName: userName,
+                    quantity: quantity
+                };
+    
+                // Lấy danh sách các flashcards đã xem gần đây từ local storage
+                let recentFlashcards = JSON.parse(localStorage.getItem(`recentFlashcards_${userId}`)) || [];
+                // Kiểm tra xem flashcard đã tồn tại trong danh sách recentFlashcards chưa
+                const existingIndex = recentFlashcards.findIndex(card => card.id === flashcard.id);
+                if (existingIndex !== -1) {
+                    // Nếu đã tồn tại, loại bỏ để đưa lên đầu
+                    recentFlashcards.splice(existingIndex, 1);
+                }
+                // Thêm flashcard mới vào đầu danh sách
+                recentFlashcards.unshift(flashcard);
+                // Giới hạn số lượng phần tử lưu trữ
+                recentFlashcards = recentFlashcards.slice(0, 3);
+                // Lưu danh sách lại vào local storage
+                localStorage.setItem(`recentFlashcards_${userId}`, JSON.stringify(recentFlashcards));
             }
-        } 
+        }
     }
+    
 
     handleCardFlip = (cardId) => {
         this.setState(prevState => ({
@@ -76,4 +106,10 @@ class DisplayFlashcard extends Component {
     }
 }
 
-export default withRouter(DisplayFlashcard);
+const mapStateToProps = state => {
+    return {
+        userInfo: state.user.userInfo
+    };
+};
+
+export default withRouter(connect(mapStateToProps)(DisplayFlashcard));

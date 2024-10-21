@@ -20,6 +20,7 @@ import Library from './Auth/library';
 import Display from './Auth/displayFlashcard';
 import Result from './Auth/searchResult';
 import Collection from './Auth/collection';
+import Edit from './Auth/editFlashcard';
 // import Login from '../routes/Login';
 // import Header from './Header/Header';
 // import System from '../routes/System';
@@ -70,6 +71,7 @@ class App extends Component {
                                     <Route path={path.DISPLAY} component={userIsAuthenticated(Display)} />
                                     <Route path={path.RESULT} component={userIsAuthenticated(Result)} />
                                     <Route path={path.COLLECTION} component={userIsAuthenticated(Collection)} />
+                                    <Route path={path.EDIT} component={userIsAuthenticated(Edit)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>
