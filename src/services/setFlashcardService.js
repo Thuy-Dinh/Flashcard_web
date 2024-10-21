@@ -165,103 +165,82 @@ let handleDelAllCollections = (id) => {
 let handleSearchSV = (id, request) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             const Sequelize = require('sequelize');
             const Op = Sequelize.Op;
-            
-            let data = await db.Setflashcard.findAll({
+
+            // Find flashcards matching the request
+            let flashcards = await db.Setflashcard.findAll({
                 where: {
                     [Op.or]: [
                         { title: { [Op.like]: `%${request}%` } },
                         { topic: { [Op.like]: `%${request}%` } }
                     ],
-                    [Op.not]: { userId: id } 
+                    [Op.not]: { userId: id }
                 },
                 attributes: ['id', 'userId', 'topic', 'title']
             });
-            console.log(data);
-            if(data.length === 0) {
+
+            // If no flashcards are found, search for users
+            if (flashcards.length === 0) {
                 let userSearch = await db.User.findAll({
                     where: {
                         [Op.or]: [
                             { firstName: { [Op.like]: `%${request}%` } },
                             { lastName: { [Op.like]: `%${request}%` } }
                         ],
-                        [Op.not]: { id: id } 
+                        [Op.not]: { id: id }
                     },
                     attributes: ['id', 'firstName', 'lastName']
                 });
-                console.log(userSearch);
+
                 let userIds = userSearch.map(record => record.id);
-                let data = await db.Setflashcard.findAll({
+                flashcards = await db.Setflashcard.findAll({
                     where: {
                         userId: { [Op.in]: userIds }
                     },
-                    attributes: ['id', 'topic', 'title'],
-                })
-
-                let flashcardIds = data.map(record => record.id);
-
-                let flashcardCounts = await db.Flashcard.findAll({
-                    where: {
-                        setFlashcardId: { [Op.in]: flashcardIds }
-                    },
-                    attributes: ['setFlashcardId', [Sequelize.fn('COUNT', Sequelize.col('id')), 'sumFlashcard']],
-                    group: ['setFlashcardId']
-                })
-
-                let quantity = flashcardCounts.map(index => index.sumFlashcard);
-
-                let userNames = userSearch.map(record => `${record.firstName} ${record.lastName}`);
-
-                // Kết hợp thông tin người dùng với bản ghi Setflashcard
-                let result = data.map((record, index) => {
-                    return {
-                        flashcardsId: record.id,
-                        userName: userNames[index],
-                        topic: record.topic,
-                        title: record.title,
-                        quantity: quantity[index]
-                    };
+                    attributes: ['id', 'userId', 'topic', 'title']
                 });
-                
-                resolve(result);
-
-            } else {
-                let flashcardIds = data.map(record => record.id);
-
-                let flashcardCounts = await db.Flashcard.findAll({
-                    where: {
-                        setFlashcardId: { [Op.in]: flashcardIds }
-                    },
-                    attributes: ['setFlashcardId', [Sequelize.fn('COUNT', Sequelize.col('id')), 'sumFlashcard']],
-                    group: ['setFlashcardId']
-                })
-
-                let quantity = flashcardCounts.map(index => index.sumFlashcard);
-
-                // Tạo một mảng các promises để tìm user cho từng userId
-                let userPromises = data.map(record => findUser(record.userId));
-
-                // Chờ tất cả các promises hoàn thành
-                let users = await Promise.all(userPromises);
-
-                // Kết hợp thông tin người dùng với bản ghi Setflashcard
-                let result = data.map((record, index) => {
-                    let user = users[index];
-                    return {
-                        flashcardsId: record.id,
-                        userName: `${user.firstName} ${user.lastName}`,
-                        topic: record.topic,
-                        title: record.title,
-                        quantity: quantity[index]
-                    };
-                });
-                
-                resolve(result);
-
             }
-            
+
+            // Fetch user information for each flashcard
+            let userIds = flashcards.map(record => record.userId);
+            let users = await db.User.findAll({
+                where: {
+                    id: { [Op.in]: userIds }
+                },
+                attributes: ['id', 'firstName', 'lastName']
+            });
+
+            let userMap = users.reduce((acc, user) => {
+                acc[user.id] = `${user.firstName} ${user.lastName}`;
+                return acc;
+            }, {});
+
+            let flashcardIds = flashcards.map(record => record.id);
+
+                let flashcardCounts = await db.Flashcard.findAll({
+                    where: {
+                        setFlashcardId: { [Op.in]: flashcardIds }
+                    },
+                    attributes: ['setFlashcardId', [Sequelize.fn('COUNT', Sequelize.col('id')), 'sumFlashcard']],
+                    group: ['setFlashcardId']
+                })
+
+                let quantity = flashcardCounts.map(index => index.sumFlashcard);
+
+            // Combine flashcard information with user information
+            let result = flashcards.map((record, index) => {
+                return {
+                    flashcardsId: record.id,
+                    userName: userMap[record.userId],
+                    topic: record.topic,
+                    title: record.title,
+                    quantity: quantity[index]
+                };
+            });
+
+            resolve(result);
+
         } catch (e) {
             reject(e);
         }
@@ -283,9 +262,79 @@ let findUser = (id) => {
     })
 }
 
+let handleRecommendSearchSV = (id, request) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            const Sequelize = require('sequelize');
+            const Op = Sequelize.Op;
+            
+            let data = await db.Setflashcard.findAll({
+                where: {
+                    [Op.or]: [
+                        { title: { [Op.like]: `%${request}%` } },
+                        { topic: { [Op.like]: `%${request}%` } }
+                    ],
+                    [Op.not]: { userId: id } 
+                },
+                attributes: ['id', 'topic', 'title']
+            });
+            
+            let result = data.map((record, index) => {
+                return {
+                    flashcardsId: record.id,
+                    topic: record.topic,
+                    title: record.title
+                };
+            });
+            
+            resolve(result);
+
+        } catch (e) {
+            reject(e);
+        }
+    });
+} 
+
+let handleUpdateFlashcards = (id, topic, title) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let flashcardsUpdated = {};
+            
+            let flashcards = await db.Setflashcard.findOne({
+                where: { id: id },
+                raw: false
+            });
+
+            if (flashcards) {
+                flashcards.topic = topic;
+                flashcards.title = title;
+
+                flashcardsUpdated.flashcards = await flashcards.save();
+
+                // Log flashcards sau khi cập nhật
+                console.log('flashcards updated:', flashcardsUpdated.flashcards);
+
+                flashcardsUpdated.errCode = 0;
+                flashcardsUpdated.errMessage = 'ok';
+            } else {
+                flashcardsUpdated.errCode = 1;
+                flashcardsUpdated.errMessage = 'Bộ flashcard không tồn tại';
+            }
+
+            resolve(flashcardsUpdated);
+
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 module.exports = {
     handleCreateNewFlashcards: handleCreateNewFlashcards,
     handleGetFlashcards: handleGetFlashcards,
     handleDelFlashcards: handleDelFlashcards,
-    handleSearchSV: handleSearchSV
+    handleSearchSV: handleSearchSV,
+    handleRecommendSearchSV: handleRecommendSearchSV,
+    handleUpdateFlashcards: handleUpdateFlashcards
 }

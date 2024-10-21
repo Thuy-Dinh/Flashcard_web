@@ -78,7 +78,70 @@ let handleGetAFlashcards = (setFlashcardId) => {
     })
 }
 
+let handleUpdateFlashcard = (id, terminology, identify) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let flashcardUpdated = {};
+            
+            let flashcard = await db.Flashcard.findOne({
+                where: { id: id },
+                raw: false
+            });
+
+            if (flashcard) {
+                flashcard.terminology = terminology;
+                flashcard.identify = identify;
+
+                flashcardUpdated.flashcard = await flashcard.save();
+
+                // Log flashcards sau khi cập nhật
+                console.log('flashcards updated:', flashcardUpdated.flashcard);
+
+                flashcardUpdated.errCode = 0;
+                flashcardUpdated.errMessage = 'ok';
+            } else {
+                flashcardUpdated.errCode = 1;
+                flashcardUpdated.errMessage = 'Bộ flashcard không tồn tại';
+            }
+
+            resolve(flashcardUpdated);
+
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+let handleDelAFlashcard = (id) => {
+    return new Promise(async(resolve, reject) => {
+        try {
+            let flashcardDel = {};
+
+            let flashcard = await db.Flashcard.findOne({
+                where: { id: id },
+                raw: false
+            })
+            if (flashcard) {
+                flashcardDel.errCode = 0;
+                flashcardDel.errMessage = 'ok';
+                flashcardDel.flashcard = await flashcard.destroy();
+            }
+            else {
+                flashcardDel.errCode = 1;
+                flashcardDel.errMessage = 'Không tìm thấy bộ flashcard cần xóa';
+            }
+    
+            resolve(flashcardDel);
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 module.exports = {
     handleCreateNewFlashcard: handleCreateNewFlashcard,
-    handleGetAFlashcards: handleGetAFlashcards
+    handleGetAFlashcards: handleGetAFlashcards,
+    handleUpdateFlashcard: handleUpdateFlashcard,
+    handleDelAFlashcard: handleDelAFlashcard
 }

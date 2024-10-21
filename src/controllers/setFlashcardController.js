@@ -83,9 +83,49 @@ let handleSearch = async(req, res) => {
 
 }
 
+let handleRecommendSearch = async(req, res) => {
+    let userId = req.body.id;
+    let request = req.body.request;
+
+    if (!userId) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Các trường dữ liệu không được để trống!'
+        });
+    }
+
+    let result = await setFlashcardService.handleRecommendSearchSV(userId, request);
+
+    return res.status(200).json({
+        data: result ? result : []
+    });
+}
+
+let handleEditFlashcards = async(req, res) => {
+    let id = req.query.id;
+    let topic = req.query.topic;
+    let title = req.query.title;
+
+    if (!id || !topic || !title) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Các trường dữ liệu không được để trống!'
+        });
+    }
+    
+    let flashcardsUpdated = await setFlashcardService.handleUpdateFlashcards(id, topic, title);
+    return res.status(200).json({
+        errCode: flashcardsUpdated.errCode,
+        message: flashcardsUpdated.errMessage,
+        flashcards: flashcardsUpdated.flashcards 
+    });
+}
+
 module.exports = {
     handleCreateFlashcards: handleCreateFlashcards,
     handleGetAllFlashcards: handleGetAllFlashcards,
     handleDeleteFlashcards: handleDeleteFlashcards,
-    handleSearch: handleSearch
+    handleSearch: handleSearch,
+    handleRecommendSearch: handleRecommendSearch,
+    handleEditFlashcards: handleEditFlashcards
 };

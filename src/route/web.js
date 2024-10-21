@@ -34,9 +34,14 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-flashcards', setFlashcardController.handleGetAllFlashcards);
     router.get('/api/get-a-flashcards', flashcardController.handleGetOneFlashcards);
 
+    router.get('/api/edit-flashcards', setFlashcardController.handleEditFlashcards);
+    router.get('/api/edit-flashcard', flashcardController.handleEditFlashcard);
+
     router.post('/api/delete-flashcards', setFlashcardController.handleDeleteFlashcards);
+    router.post('/api/delete-a-flashcard', flashcardController.handleDeleteAFlashcard);
 
     router.get('/api/search', setFlashcardController.handleSearch);
+    router.post('/api/recommend-searchResult', setFlashcardController.handleRecommendSearch)
 
     router.post('/api/create-collection', collectionController.collectionFlashcards);
     router.post('/api/display-collection', collectionController.getAllCollection);

@@ -199,14 +199,17 @@ let handleDelete = (useEmail) => {
             let userId = user.id;
             console.log("User ID: ", userId);
 
+            // First, delete all collections related to the user
+            await handleDelAllCollections(userId);
+
             // Then delete all flashcards related to the user
             await handleDelAllFlashcards(userId);
 
             // Finally delete the user
+            await user.destroy();
+
             userDel.errCode = 0;
             userDel.errMessage = 'ok';
-            userDel.user = await user.destroy();
-
             resolve(userDel);
 
         } catch (e) {
@@ -226,7 +229,6 @@ let handleDelAllFlashcards = (userId) => {
             for (let flashcard of flashcards) {
                 console.log("Deleting flashcard set with ID: ", flashcard.id);
                 await handleDelAllFlashcard(flashcard.id);
-                await handleDelAllCollections(userId, flashcard.id);
                 await flashcard.destroy();
             }
 
@@ -252,18 +254,11 @@ let handleDelAllFlashcard = (setFlashcardId) => {
     });
 }
 
-let handleDelAllCollections = (userId, flashacrdId) => {
+let handleDelAllCollections = (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-
-            const Sequelize = require('sequelize');
-            const Op = Sequelize.Op;
-
             let collections = await db.Collection.findAll({
-                where: { [Op.or]: [
-                        { userId: userId },
-                        { setFlashcardId: flashacrdId }
-                    ] },
+                where: { userId: userId },
                 raw: false
             });
 

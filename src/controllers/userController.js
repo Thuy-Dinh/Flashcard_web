@@ -21,6 +21,7 @@ let handleLogin = async (req, res) => {
         message: userData.errMessage,
         user: userData.user ? userData.user : {}
     });
+
 };
 
 let handleGetAllUsers = async(req, res) => {
@@ -93,10 +94,15 @@ let handleEditUser = async (req, res) => {
         // Log kết quả trả về từ dịch vụ
         console.log('Edit result:', userUpdated);
 
+        // return res.status(200).json({
+        //     errCode: userUpdated.errCode,
+        //     message: userUpdated.errMessage,
+        //     user: userUpdated.user 
+        // });
         return res.status(200).json({
-            errCode: userUpdated.errCode,
-            message: userUpdated.errMessage,
-            user: userUpdated.user 
+            "deviceId": "8a0fc66a61a959f6",
+            "qrCodeId": "adjaksdjsdjasdk",
+            "qrCodeValue": "132ekdmaodmaso" 
         });
     } catch (error) {
         // Log lỗi nếu có

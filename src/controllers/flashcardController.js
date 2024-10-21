@@ -44,7 +44,50 @@ let handleGetOneFlashcards = async(req, res) => {
     })
 }
 
+let handleEditFlashcard = async(req, res) => {
+    let id = req.query.id;
+    console.log(id);
+    let terminology = req.query.terminology;
+    let identify = req.query.identify;
+
+    if (!id || !terminology || !identify) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Các trường dữ liệu không được để trống!'
+        });
+    }
+    
+    let flashcardUpdated = await flashcardService.handleUpdateFlashcard(id, terminology, identify);
+    return res.status(200).json({
+        errCode: flashcardUpdated.errCode,
+        message: flashcardUpdated.errMessage,
+        flashcard: flashcardUpdated.flashcard
+    });
+}
+
+let handleDeleteAFlashcard = async(req, res) => {
+    let id = req.body.id;
+
+    if (!id) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Không tìm thấy flashcard!'
+        });
+    }
+
+    let flashcardDeleted = await flashcardService.handleDelAFlashcard(id);
+    console.log(flashcardDeleted);
+
+    return res.status(200).json({
+        errCode: flashcardDeleted.errCode,
+        message: flashcardDeleted.errMessage,
+        flashcard: flashcardDeleted.flashcards 
+    });
+}
+
 module.exports = {
     handleCreateFlashcard: handleCreateFlashcard,
-    handleGetOneFlashcards: handleGetOneFlashcards
+    handleGetOneFlashcards: handleGetOneFlashcards,
+    handleEditFlashcard: handleEditFlashcard,
+    handleDeleteAFlashcard: handleDeleteAFlashcard
 };
